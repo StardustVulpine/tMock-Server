@@ -7,7 +7,6 @@
 #include <memory>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
 
 namespace tmockserver {
@@ -28,6 +27,8 @@ namespace tmockserver {
             m_address.sin_addr.s_addr = htonl(INADDR_ANY);
         }
 
-        bind(m_socket, reinterpret_cast<sockaddr*>(&m_address), sizeof(m_address));
+        return bind(m_socket, reinterpret_cast<sockaddr*>(&m_address), sizeof(m_address)) == 0;
+
+
     }
 } // tmockserver
