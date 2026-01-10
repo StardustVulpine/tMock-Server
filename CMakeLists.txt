@@ -8,6 +8,9 @@ add_executable(terraria_mock_server main.cpp
         classes/Socket.cpp
         classes/Socket.h
         enums/AdressFamily.h
-        enums/ConnectionType.h)
+        enums/ConnectionType.h
+        classes/Exception.cpp
+        classes/Exception.h
+)
 
 TARGET_INCLUDE_DIRECTORIES(terraria_mock_server PRIVATE classes enums structs)
