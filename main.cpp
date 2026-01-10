@@ -5,20 +5,8 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include "messages.h"
 
-struct messageStruct {
-    short int msg_size;
-    char msg_type;
-    char payload_size;
-};
-
-struct errorMsgStruct {
-    short int msg_size;
-    char msg_type;
-    char msg_type2 = 0x2;
-    char payload_size;
-    char payload_msg[128];
-};
 
 std::string errorText = "Hello Mock Terraria Server sdasdsadasda";
 
@@ -50,7 +38,7 @@ int main()
             continue;
         }
 
-        messageStruct message;
+        init_message message;
         read(client_socket, &message, sizeof(message));
         int msg_size = static_cast<int>(message.payload_size);
 
@@ -59,12 +47,12 @@ int main()
         read(client_socket, t_msg, msg_size);
 
         printf("Message Size: %i \n", message.msg_size);
-        printf("Message Type: %i \n", sizeof(errorMsgStruct));
+        printf("Message Type: %i \n", sizeof(error_message));
         printf("Message: %s \n", t_msg);
         free(t_msg);
 
 
-        errorMsgStruct errorMsg;
+        error_message errorMsg;
         errorMsg.msg_type = 2;
         for (int i = 0; i < errorText.size(); i++) {
             errorMsg.payload_msg[i] = errorText[i];
@@ -73,7 +61,7 @@ int main()
         errorMsg.payload_msg[errorText.size()] = '\0';
         errorMsg.msg_size = sizeof(errorMsg.msg_size) + sizeof(errorMsg.msg_type) + sizeof(errorMsg.msg_type2) + sizeof(errorMsg.payload_size) + errorText.size();
 
-        if (write(client_socket, &errorMsg, sizeof(errorMsgStruct)) == -1) {
+        if (write(client_socket, &errorMsg, sizeof(error_message)) == -1) {
             perror(strerror(errno));
         }
         //write(client_socket, "dupa", sizeof("dupa"));
