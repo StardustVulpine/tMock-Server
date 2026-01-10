@@ -23,11 +23,9 @@ int main()
         return 1;
     }
 
-    sockaddr_in client_addr {};
-    int client_len = sizeof(client_addr);
 
     while (true) {
-        int client_socket = accept(server_socket, reinterpret_cast<sockaddr*>(&client_addr), reinterpret_cast<socklen_t*>(&client_len));
+        int client_socket = server_socket.Accept();
 
         if (client_socket == -1) {
             perror(strerror(errno));
