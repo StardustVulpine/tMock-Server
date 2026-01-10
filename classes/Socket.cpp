@@ -34,7 +34,11 @@ namespace tmockserver {
         return listen(m_socket, SOMAXCONN) == 0;
     }
 
-
+    Socket_T Socket::Accept() {
+        sockaddr_in client_addr {};
+        int client_len = sizeof(client_addr);
+        return accept(m_socket, reinterpret_cast<sockaddr*>(&client_addr), reinterpret_cast<socklen_t*>(&client_len));
+    }
 
 
 

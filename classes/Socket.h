@@ -19,6 +19,7 @@ namespace tmockserver {
         Socket(AdressFamily adress_family, ConnectionType connection_type);
         bool Bind(unsigned short int port, std::optional<std::string> ip_adress=std::nullopt);
         bool Listen();
+        Socket_T Accept();
 
         operator int() const { return m_socket; }
 
