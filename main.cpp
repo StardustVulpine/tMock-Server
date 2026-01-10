@@ -27,11 +27,13 @@ int main()
     }
 
     while (true) {
-        int client_socket = server_socket.Accept();
+        Socket client_socket;
 
-        if (client_socket == -1) {
-            perror(strerror(errno));
-            continue;
+        try {
+            Socket client_socket_tmp (server_socket.Accept());
+            client_socket = client_socket_tmp;
+        } catch (const Exception& e) {
+            std::cerr << e.what() << std::endl;
         }
 
         init_message message;
