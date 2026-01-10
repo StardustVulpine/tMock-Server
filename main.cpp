@@ -30,19 +30,20 @@ int main()
         Socket client_socket;
 
         try {
-            Socket client_socket_tmp (server_socket.Accept());
+            auto client_socket_tmp = server_socket.Accept();
             client_socket = client_socket_tmp;
         } catch (const Exception& e) {
             std::cerr << e.what() << std::endl;
         }
 
         init_message message;
-        read(client_socket, &message, sizeof(message));
+        client_socket.Read(&message, sizeof(message));
+
         int msg_size = static_cast<int>(message.payload_size);
 
         char *t_msg = reinterpret_cast<char*>(malloc(msg_size*sizeof(char)));
 
-        read(client_socket, t_msg, msg_size);
+        client_socket.Read(t_msg, msg_size);
 
         printf("Message Size: %i \n", message.msg_size);
         printf("Message Type: %i \n", sizeof(error_message));
