@@ -20,6 +20,10 @@ namespace tmockserver {
         m_socket = socket(m_adress_family, connType, 0);
     }
 
+    Socket::Socket(Socket_T socket) : m_socket(socket) {
+        if (m_socket == INVALID_SOCKET) throw Exception(strerror(errno));
+    }
+
     bool Socket::Bind(unsigned short int port, std::optional<std::string> ip_adress) {
         m_address.sin_port = htons(port);
         m_address.sin_family = m_adress_family;
@@ -33,9 +37,7 @@ namespace tmockserver {
     }
 
     void Socket::Listen() {
-        if (listen(m_socket, SOMAXCONN) == -1) {
-            throw Exception(strerror(errno));
-        }
+        if (listen(m_socket, SOMAXCONN) == -1) throw Exception(strerror(errno));
     }
 
     Socket_T Socket::Accept() {
