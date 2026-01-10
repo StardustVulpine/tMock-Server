@@ -5,6 +5,8 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+
+#include "Exception.h"
 #include "structs/messages.h"
 #include "./classes/Socket.h"
 
@@ -18,11 +20,11 @@ int main()
     Socket server_socket(AdressFamily::IPv4, ConnectionType::TCP);
     server_socket.Bind(8090);
 
-    if (!server_socket.Listen()) {
-        perror(strerror(errno));
-        return 1;
+    try {
+        server_socket.Listen();
+    } catch (const Exception& e) {
+        std::cerr << e.what() << std::endl;
     }
-
 
     while (true) {
         int client_socket = server_socket.Accept();
