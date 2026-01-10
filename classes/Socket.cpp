@@ -28,7 +28,14 @@ namespace tmockserver {
         }
 
         return bind(m_socket, reinterpret_cast<sockaddr*>(&m_address), sizeof(m_address)) == 0;
-
-
     }
+
+    bool Socket::Listen() {
+        return listen(m_socket, SOMAXCONN) == 0;
+    }
+
+
+
+
+
 } // tmockserver
