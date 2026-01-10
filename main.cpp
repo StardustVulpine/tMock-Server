@@ -6,23 +6,19 @@
 #include <string.h>
 #include <unistd.h>
 #include "structs/messages.h"
+#include "./classes/Socket.h"
 
 
 std::string errorText = "Hello Mock Terraria Server sdasdsadasda";
 
 int main()
 {
-    int server_socket = socket(AF_INET, SOCK_STREAM, 0);
-    sockaddr_in serv_addr;
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(8090);
-    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    using namespace tmockserver;
 
+    Socket server_socket(AdressFamily::IPv4, ConnectionType::TCP);
+    server_socket.Bind(8090);
 
-    bind(server_socket, reinterpret_cast<sockaddr*>(&serv_addr), sizeof(serv_addr));
-
-
-    if (listen(server_socket, SOMAXCONN) == -1) {
+    if (!server_socket.Listen()) {
         perror(strerror(errno));
         return 1;
     }
