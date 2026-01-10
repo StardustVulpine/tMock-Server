@@ -3,11 +3,13 @@
 //
 
 #include "Socket.h"
+#include "Exception.h"
 
 #include <memory>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
+#include <string.h>
 
 namespace tmockserver {
     Socket::Socket(AdressFamily adress_family, ConnectionType connection_type) {
@@ -30,8 +32,10 @@ namespace tmockserver {
         return bind(m_socket, reinterpret_cast<sockaddr*>(&m_address), sizeof(m_address)) == 0;
     }
 
-    bool Socket::Listen() {
-        return listen(m_socket, SOMAXCONN) == 0;
+    void Socket::Listen() {
+        if (listen(m_socket, SOMAXCONN) == -1) {
+            throw Exception(strerror(errno));
+        }
     }
 
     Socket_T Socket::Accept() {
