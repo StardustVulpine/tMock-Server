@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <errno.h>
+#include <memory>
 #include <string.h>
 #include <unistd.h>
 
@@ -39,16 +40,16 @@ int main()
         init_message message;
         client_socket.Read(&message, sizeof(message));
 
-        int msg_size = static_cast<int>(message.payload_size);
+        int msg_size = message.payload_size;
 
-        char *t_msg = reinterpret_cast<char*>(malloc(msg_size*sizeof(char)));
+        auto t_msg = std::make_unique<char[]>(msg_size);
 
-        client_socket.Read(t_msg, msg_size);
+        client_socket.Read(t_msg.get(), msg_size);
 
         printf("Message Size: %i \n", message.msg_size);
         printf("Message Type: %i \n", sizeof(error_message));
-        printf("Message: %s \n", t_msg);
-        free(t_msg);
+        printf("Message: %s \n", t_msg.get());
+
 
 
         error_message errorMsg;
@@ -67,7 +68,6 @@ int main()
 
 
     }
-
 
 
 
