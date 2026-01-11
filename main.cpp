@@ -10,13 +10,16 @@
 #include "Exception.h"
 #include "structs/messages.h"
 #include "./classes/Socket.h"
-
+#include "./classes/Log.h"
 
 std::string errorText = "Hello Mock Terraria Server sdasdsadasda";
 
 int main()
 {
     using namespace tmockserver;
+    using namespace tmockserver::messagelogger;
+
+    Log log;
 
     Socket server_socket(AdressFamily::IPv4, ConnectionType::TCP);
     server_socket.Bind(8090);
@@ -46,11 +49,7 @@ int main()
 
         client_socket.Read(t_msg.get(), msg_size);
 
-        printf("Message Size: %i \n", message.msg_size);
-        printf("Message Type: %i \n", sizeof(error_message));
-        printf("Message: %s \n", t_msg.get());
-
-
+        Log::InitMessage(message, t_msg.get());
 
         error_message errorMsg;
         errorMsg.msg_type = 2;
