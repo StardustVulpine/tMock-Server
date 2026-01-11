@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#include "../structs/messages.h"
+#include "../structs/messages.hpp"
 #include <string>
 
 namespace tmockserver::messagelogger {

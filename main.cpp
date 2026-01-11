@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 #include "Exception.h"
-#include "structs/messages.h"
+#include "structs/messages.hpp"
 #include "./classes/Socket.h"
 #include "./classes/Log.h"
 
