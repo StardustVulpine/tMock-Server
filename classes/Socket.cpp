@@ -25,7 +25,7 @@ namespace tmockserver {
     }
 
     Socket::~Socket() {
-        close(m_socket);
+        //close(m_socket);
     }
 
     bool Socket::Bind(unsigned short int port, std::optional<std::string> ip_adress) {
