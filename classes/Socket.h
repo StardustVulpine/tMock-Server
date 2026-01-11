@@ -21,6 +21,7 @@ namespace tmockserver {
         Socket() = default;
         Socket(AdressFamily adress_family, ConnectionType connection_type); // Server socket constructor
         Socket(Socket_T socket); // Client socket constructor
+        ~Socket();
 
         bool Bind(unsigned short int port, std::optional<std::string> ip_adress=std::nullopt);
         void Listen();

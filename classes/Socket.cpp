@@ -24,6 +24,10 @@ namespace tmockserver {
         if (m_socket == INVALID_SOCKET) throw Exception(strerror(errno));
     }
 
+    Socket::~Socket() {
+        close(m_socket);
+    }
+
     bool Socket::Bind(unsigned short int port, std::optional<std::string> ip_adress) {
         m_address.sin_port = htons(port);
         m_address.sin_family = m_adress_family;
