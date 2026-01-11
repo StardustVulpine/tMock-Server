@@ -7,9 +7,8 @@
 
 #include <memory>
 #include <sys/socket.h>
-#include <sys/types.h>
 #include <arpa/inet.h>
-#include <string.h>
+#include <cstring>
 
 namespace tmockserver {
     Socket::Socket(AdressFamily adress_family, ConnectionType connection_type) {
@@ -40,17 +39,17 @@ namespace tmockserver {
         return bind(m_socket, reinterpret_cast<sockaddr*>(&m_address), sizeof(m_address)) == 0;
     }
 
-    void Socket::Listen() {
+    void Socket::Listen() const {
         if (listen(m_socket, SOMAXCONN) == -1) throw Exception(strerror(errno));
     }
 
-    Socket Socket::Accept() {
+    Socket Socket::Accept() const {
         sockaddr_in client_addr {};
         int client_len = sizeof(client_addr);
-        return Socket(accept(m_socket, reinterpret_cast<sockaddr*>(&client_addr), reinterpret_cast<socklen_t*>(&client_len)));
+        return {accept(m_socket, reinterpret_cast<sockaddr*>(&client_addr), reinterpret_cast<socklen_t*>(&client_len))};
     }
 
-    void Socket::Read(void *buffer, unsigned int size) {
+    void Socket::Read(void *buffer, unsigned int size) const {
         read(m_socket, buffer, size);
     }
 } // tmockserver

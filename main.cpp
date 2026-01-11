@@ -1,16 +1,14 @@
 #include <iostream>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <errno.h>
+#include <cerrno>
 #include <memory>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 
 #include "Exception.h"
 #include "structs/messages.hpp"
 #include "./classes/Socket.h"
 #include "./classes/Log.h"
+#include "classes/InitMessage.hpp"
 
 std::string errorText = "Hello Mock Terraria Server sdasdsadasda";
 
@@ -18,8 +16,7 @@ int main()
 {
     using namespace tmockserver;
     using namespace tmockserver::messagelogger;
-
-    Log log;
+    using namespace tmockserver::messages;
 
     Socket server_socket(AdressFamily::IPv4, ConnectionType::TCP);
     server_socket.Bind(8090);
@@ -40,16 +37,14 @@ int main()
             std::cerr << e.what() << std::endl;
         }
 
-        init_message message;
-        client_socket.Read(&message, sizeof(message));
+        auto msgBuffer = std::make_unique<char[]>(InitMessage::Size());
+        client_socket.Read(msgBuffer.get(), InitMessage::Size());
+        std::stringstream ss;
+        ss.write(msgBuffer.get(), InitMessage::Size());
+        InitMessage i_msg(std::move(ss));
+        i_msg.Print();
 
-        int msg_size = message.payload_size;
-
-        auto t_msg = std::make_unique<char[]>(msg_size);
-
-        client_socket.Read(t_msg.get(), msg_size);
-
-        Log::InitMessage(message, t_msg.get());
+        // -----------------------
 
         error_message errorMsg;
         errorMsg.msg_type = 2;

@@ -24,9 +24,9 @@ namespace tmockserver {
         ~Socket();
 
         bool Bind(unsigned short int port, std::optional<std::string> ip_adress=std::nullopt);
-        void Listen();
-        Socket Accept();
-        void Read(void *buffer, unsigned int size);
+        void Listen() const;
+        Socket Accept() const;
+        void Read(void *buffer, unsigned int size) const;
 
         operator int() const { return m_socket; }
 
