@@ -13,6 +13,10 @@ add_executable(terraria_mock_server main.cpp
         classes/Exception.h
         classes/Log.cpp
         classes/Log.h
+        classes/BaseMessage.cpp
+        classes/BaseMessage.hpp
+        classes/InitMessage.cpp
+        classes/InitMessage.hpp
 )
 
 TARGET_INCLUDE_DIRECTORIES(terraria_mock_server PRIVATE classes enums structs)
