@@ -5,8 +5,8 @@
 #pragma once
 
 struct init_message {
-    short int msg_size;
-    char msg_type;
+    short int size;
+    char type;
     char payload_size;
 };
 
