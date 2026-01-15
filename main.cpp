@@ -5,13 +5,15 @@
 #include <unistd.h>
 
 #include "Exception.hpp"
+#include "TextModes.h"
 #include "structs/messages.hpp"
 #include "./classes/Socket.hpp"
 #include "./classes/Log.hpp"
 #include "classes/messages/ConnectRequest.hpp"
+#include "enums/MessageTypes.h"
 
 
-std::string errorText = "Hello tMock Server!";
+std::string errorText = "CLI.DeleteConfirmation";
 
 int main()
 {
@@ -49,7 +51,7 @@ int main()
 
         error_message errorMsg;
         errorMsg.msg_type = 2;
-        errorMsg.network_text_mode = 0x00;
+        errorMsg.network_text_mode = static_cast<unsigned char>(TextModes::LOCALIZATION_KEY);
         for (int i = 0; i < errorText.size(); i++) {
             errorMsg.payload_msg[i] = errorText[i];
         }

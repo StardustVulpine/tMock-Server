@@ -17,6 +17,10 @@ add_executable(terraria_mock_server main.cpp
         classes/messages/BaseMessage.hpp
         classes/messages/ConnectRequest.cpp
         classes/messages/ConnectRequest.hpp
+        enums/MessageTypes.h
+        enums/TextModes.h
+        classes/messages/FatalErrorMessage.cpp
+        classes/messages/FatalErrorMessage.hpp
 )
 
 TARGET_INCLUDE_DIRECTORIES(terraria_mock_server PRIVATE classes enums structs)
