@@ -2,7 +2,7 @@
 // Created by stardustvulpine on 1/11/26.
 //
 
-#include "Log.h"
+#include "Log.hpp"
 
 namespace tmockserver::messagelogger {
 

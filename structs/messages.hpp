@@ -4,16 +4,18 @@
 
 #pragma once
 
-struct init_message {
-    short int size;
-    char type;
-    char payload_size;
-};
+namespace tmockserver {
+    struct init_message {
+        short int size;
+        char type;
+        char payload_size;
+    };
 
-struct error_message {
-    short int msg_size;
-    char msg_type;
-    char msg_type2 = 0x2;
-    char payload_size;
-    char payload_msg[128];
-};
+    struct error_message {
+        short int msg_size{};
+        char msg_type{};
+        char network_text_mode{};
+        char payload_size{};
+        char payload_msg[128]{};
+    };
+}

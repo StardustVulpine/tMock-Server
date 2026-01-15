@@ -2,19 +2,20 @@
 // Created by stardustvulpine on 1/11/26.
 //
 
-#include "InitMessage.hpp"
+#include "ConnectRequest.hpp"
 #include <iostream>
 
 namespace tmockserver::messages {
-    InitMessage::InitMessage(std::stringstream stream) : BaseMessage(stream) {
+    ConnectRequest::ConnectRequest(std::stringstream stream) : BaseMessage(stream) {
         stream.read(&textSize, sizeof(textSize));
         stream.read(textContent, MAX_TEXT_LENGTH);
         textContent[MAX_TEXT_LENGTH] = '\0';
     }
 
-    void InitMessage::Print() const {
+    void ConnectRequest::Print() const {
         BaseMessage::Print();
         std::println(std::cout, "Text Size: {:d}", textSize);
         std::println(std::cout, "Text Content: {}", textContent);
+        std::println(std::cout, "---");
     }
 } // tmockserver::messages

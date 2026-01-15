@@ -6,11 +6,11 @@
 #include "BaseMessage.hpp"
 
 namespace tmockserver::messages {
-    class InitMessage : public BaseMessage {
+    class ConnectRequest : public BaseMessage {
     public:
-        InitMessage(std::stringstream stream);
+        ConnectRequest(std::stringstream stream);
 
-        ~InitMessage() override = default;
+        ~ConnectRequest() override = default;
 
         void Print() const override;
         static constexpr std::size_t Size() {

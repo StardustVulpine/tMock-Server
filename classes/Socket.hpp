@@ -8,7 +8,7 @@
 #include <string>
 #include <netinet/in.h>
 
-#include "../enums/AdressFamily.h"
+#include "../enums/AddressFamily.h"
 #include "../enums/ConnectionType.h"
 
 using Socket_T = int;
@@ -19,11 +19,11 @@ namespace tmockserver {
     class Socket {
         public:
         Socket() = default;
-        Socket(AdressFamily adress_family, ConnectionType connection_type); // Server socket constructor
+        Socket(AddressFamily address_family, ConnectionType connection_type); // Server socket constructor
         Socket(Socket_T socket); // Client socket constructor
         ~Socket();
 
-        bool Bind(unsigned short int port, std::optional<std::string> ip_adress=std::nullopt);
+        bool Bind(unsigned short int port, const std::optional<std::string> &ip_address=std::nullopt);
         void Listen() const;
         Socket Accept() const;
         void Read(void *buffer, unsigned int size) const;
@@ -32,9 +32,9 @@ namespace tmockserver {
 
 
         private:
-        Socket_T m_socket = INVALID_SOCKET;
-        sockaddr_in m_address{};
-        int m_adress_family{};
+        Socket_T m_socket = INVALID_SOCKET; // Variable for storing socket created in constructor
+        sockaddr_in m_address{}; //
+        int m_address_family{}; // Variable for storing IP address family (IPv4 or IPv6)
 
     };
 } // tmockserver
