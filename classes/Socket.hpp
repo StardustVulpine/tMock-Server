@@ -8,6 +8,7 @@
 #include <string>
 #include <netinet/in.h>
 
+#include "messages.hpp"
 #include "../enums/AddressFamily.h"
 #include "../enums/ConnectionType.h"
 
@@ -27,6 +28,7 @@ namespace tmockserver {
         void Listen() const;
         Socket Accept() const;
         void Read(void *buffer, unsigned int size) const;
+        void Write(const void *buffer, unsigned int size) const;
 
         operator int() const { return m_socket; }
 

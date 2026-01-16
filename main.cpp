@@ -1,8 +1,5 @@
 #include <iostream>
-#include <cerrno>
 #include <memory>
-#include <cstring>
-#include <unistd.h>
 
 #include "Exception.hpp"
 #include "TextModes.h"
@@ -51,7 +48,7 @@ int main()
 
         error_message errorMsg;
         errorMsg.msg_type = 2;
-        errorMsg.network_text_mode = static_cast<unsigned char>(TextModes::LOCALIZATION_KEY);
+        errorMsg.network_text_mode = enumTo<char>(TextModes::LOCALIZATION_KEY);
         for (int i = 0; i < errorText.size(); i++) {
             errorMsg.payload_msg[i] = errorText[i];
         }
@@ -59,10 +56,14 @@ int main()
         errorMsg.payload_msg[errorText.size()] = '\0';
         errorMsg.msg_size = sizeof(errorMsg.msg_size) + sizeof(errorMsg.msg_type) + sizeof(errorMsg.network_text_mode) + sizeof(errorMsg.payload_size) + errorText.size();
 
-        if (write(client_socket, &errorMsg, sizeof(error_message)) == -1) {
-            perror(strerror(errno));
+        // ----------------------
+
+        try {
+            client_socket.Write(&errorMsg, sizeof(error_message));
+        } catch (const Exception& e) {
+            std::cerr << e.what() << std::endl;
         }
 
-        // ----------------------
+
     }
 }

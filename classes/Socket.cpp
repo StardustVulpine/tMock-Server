@@ -76,4 +76,10 @@ namespace tmockserver {
     void Socket::Read(void *buffer, unsigned int size) const {
         read(m_socket, buffer, size);
     }
+
+    void Socket::Write(const void *buffer, unsigned int size) const {
+        if (write(m_socket, buffer, size) == -1) {
+            throw Exception(strerror(errno));
+        }
+    }
 } // tmockserver
