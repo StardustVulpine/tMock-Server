@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#include "../structs/messages.hpp"
+
 #include <string>
 
 namespace tmockserver::messagelogger {
@@ -11,7 +11,7 @@ namespace tmockserver::messagelogger {
         public:
         Log() = default;
 
-        static void InitMessage(init_message msg, std::string payload);
+        //static void InitMessage(init_message msg, std::string payload);
 
     };
 } // tmockserver

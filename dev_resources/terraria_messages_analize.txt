@@ -1,0 +1,28 @@
+Kick Message Structure
+HEX = DEC
+0x15 0x00 (actually after reversing network order: 00 15) = 21 (Entire Message Size)
+0x02  = 02 (Message Type: 2 for Fatal Error Message)
+0x02  = 02 (Network Type Mode 0x02 in hex or 2 in dec Localization Key)
+0x0f  = 15 (Error Text Size - 15 Characters)
+0x43 0x4c 0x49 0x2e 0x4b 0x69 0x63 0x6b 0x4d 0x65 0x73 0x73 0x61 0x67 0x65 0x00 = CLI.KickMessage
+
+
+Server Message (say command)
+0x23 0x00 = 35 (Entire Message Size)
+0x52    = Message Type
+0x01    = Network Text Mode: FORMATTABLE
+0x00    = ?
+0xff    = Sender Player Slot (255 for server)
+0x02    = Network Text Mode: LOCALIZATION_KEY
+0x11    = Text Size (17 Characters)
+*(Message Here: "CLI.ServerMessage")*
+0x01    = ?
+0x00    = Network Text Mode: LITERAL
+0x04    = Text Size (4 Characters)
+*(Message Here: "dupa")*
+0xff    = ColorR
+0xf0    = ColorG
+0x14    = ColorB
+
+
+#FFFF00

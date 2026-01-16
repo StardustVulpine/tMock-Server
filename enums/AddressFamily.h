@@ -5,7 +5,7 @@
 #pragma once
 
 namespace tmockserver {
-    enum class AdressFamily {
+    enum class AddressFamily {
         IPv4 = 0,
         IPv6
     };

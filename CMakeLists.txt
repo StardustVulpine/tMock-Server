@@ -4,19 +4,26 @@ project(terraria_mock_server)
 set(CMAKE_CXX_STANDARD 26)
 
 add_executable(terraria_mock_server main.cpp
-        structs/messages.hpp
-        classes/Socket.cpp
-        classes/Socket.h
-        enums/AdressFamily.h
+        # Enums
+        enums/AddressFamily.h
         enums/ConnectionType.h
+        enums/MessageTypes.h
+        enums/TextModes.h
+
+        # Classes
+        classes/Socket.cpp
+        classes/Socket.hpp
         classes/Exception.cpp
-        classes/Exception.h
+        classes/Exception.hpp
         classes/Log.cpp
-        classes/Log.h
-        classes/BaseMessage.cpp
-        classes/BaseMessage.hpp
-        classes/InitMessage.cpp
-        classes/InitMessage.hpp
+        classes/Log.hpp
+        classes/Messages.hpp
+        classes/messages/BaseMessage.cpp
+        classes/messages/BaseMessage.hpp
+        classes/messages/ConnectRequest.cpp
+        classes/messages/ConnectRequest.hpp
+        classes/messages/FatalErrorMessage.cpp
+        classes/messages/FatalErrorMessage.hpp
 )
 
 TARGET_INCLUDE_DIRECTORIES(terraria_mock_server PRIVATE classes enums structs)
