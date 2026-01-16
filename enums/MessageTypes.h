@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <type_traits>
+#include <cstddef>
+
 namespace tmockserver {
     // In HEX byte values
     enum class MessageTypes : std::underlying_type_t<std::byte> {
