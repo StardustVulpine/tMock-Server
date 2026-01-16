@@ -3,14 +3,10 @@
 
 #include "Exception.hpp"
 #include "TextModes.h"
-#include "structs/messages.hpp"
-#include "./classes/Socket.hpp"
-#include "./classes/Log.hpp"
-#include "classes/messages/ConnectRequest.hpp"
-#include "enums/MessageTypes.h"
+#include "classes/Socket.hpp"
+#include "classes/Log.hpp"
+#include "classes/Messages.hpp"
 
-
-std::string errorText = "CLI.DeleteConfirmation";
 
 int main()
 {
@@ -44,22 +40,11 @@ int main()
         ConnectRequest i_msg(std::move(ss));
         i_msg.Print();
 
-        // -----------------------
-
-        error_message errorMsg;
-        errorMsg.msg_type = 2;
-        errorMsg.network_text_mode = enumTo<char>(TextModes::LOCALIZATION_KEY);
-        for (int i = 0; i < errorText.size(); i++) {
-            errorMsg.payload_msg[i] = errorText[i];
-        }
-        errorMsg.payload_size = errorText.size();
-        errorMsg.payload_msg[errorText.size()] = '\0';
-        errorMsg.msg_size = sizeof(errorMsg.msg_size) + sizeof(errorMsg.msg_type) + sizeof(errorMsg.network_text_mode) + sizeof(errorMsg.payload_size) + errorText.size();
-
-        // ----------------------
+        FatalErrorMessage errorMessage(TextModes::LITERAL, "Hello tMockServer!");
 
         try {
-            client_socket.Write(&errorMsg, sizeof(error_message));
+            auto [fst, snd] = errorMessage.GetContent();
+            client_socket.Write(fst.get(), snd);
         } catch (const Exception& e) {
             std::cerr << e.what() << std::endl;
         }

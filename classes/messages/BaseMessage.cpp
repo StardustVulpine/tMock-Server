@@ -5,15 +5,31 @@
 #include "BaseMessage.hpp"
 #include <iostream>
 
+#include "TextModes.h"
+
 namespace tmockserver::messages {
     BaseMessage::BaseMessage(std::stringstream &stream) {
-        stream.read(reinterpret_cast<char*>(&size), sizeof(size));
-        stream.read(&type, sizeof(type));
+        stream.read(reinterpret_cast<char*>(&m_size), sizeof(m_size));
+        stream.read(&m_type, sizeof(m_type));
+    }
+
+    BaseMessage::BaseMessage(const std::size_t size, const MessageTypes type) {
+        m_size = size + 3;
+        m_type = enumTo<char>(type);
     }
 
     void BaseMessage::Print() const {
-        std::println(std::cout, "Message Size: {}", size);
-        std::println(std::cout, "Message Type: {:d}", type);
+        std::println(std::cout, "Message Size: {}", m_size);
+        std::println(std::cout, "Message Type: {:d}", m_type);
     }
 
+    std::unique_ptr<char[]> BaseMessage::CreateBuffer() {
+        auto buffer = std::make_unique<char[]>(m_size);
+        char* ptr = buffer.get();
+
+        *reinterpret_cast<short int*>(ptr) = m_size;
+        ptr += sizeof(m_size);
+        *ptr = m_type;
+        return buffer;
+    }
 } // tmockserver::messages
