@@ -74,7 +74,11 @@ namespace tmockserver {
     }
 
     void Socket::Read(void *buffer, unsigned int size) const {
-        read(m_socket, buffer, size);
+        size_t bytesRead = 0;
+        do {
+            bytesRead += read(m_socket, static_cast<char*>(buffer) + bytesRead, size - bytesRead);
+        } while (bytesRead < size);
+
     }
 
     void Socket::Write(const void *buffer, unsigned int size) const {
