@@ -6,8 +6,8 @@
 
 
 #include <TextModes.h>
-
 #include "BaseMessage.hpp"
+#include "Socket.hpp"
 
 namespace tmockserver::messages {
     class FatalErrorMessage : public BaseMessage {
@@ -16,7 +16,9 @@ namespace tmockserver::messages {
         ~FatalErrorMessage() override = default;
 
         void Print() const override;
-        std::pair<std::unique_ptr<char[]>, size_t> GetContent();
+        void Send(const Socket &socket) const override;
+        [[nodiscard]] std::pair<std::unique_ptr<char[]>, size_t> GetContent() const;
+
 
     private:
         unsigned char m_networkTextMode{};

@@ -14,7 +14,7 @@ namespace tmockserver::messages {
     }
 
     BaseMessage::BaseMessage(const std::size_t size, const MessageTypes type) {
-        m_size = size + 3;
+        m_size = static_cast<short int>(size);
         m_type = enumTo<char>(type);
     }
 
@@ -23,7 +23,12 @@ namespace tmockserver::messages {
         std::println(std::cout, "Message Type: {:d}", m_type);
     }
 
-    std::unique_ptr<char[]> BaseMessage::CreateBuffer() {
+    void BaseMessage::Send(const Socket &socket) const {
+
+    }
+
+
+    std::unique_ptr<char[]> BaseMessage::CreateBuffer() const {
         auto buffer = std::make_unique<char[]>(m_size);
         char* ptr = buffer.get();
 

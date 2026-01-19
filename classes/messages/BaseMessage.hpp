@@ -8,6 +8,8 @@
 #include <sstream>
 #include <MessageTypes.h>
 
+#include "Socket.hpp"
+
 namespace tmockserver::messages {
     class BaseMessage {
     public:
@@ -18,9 +20,10 @@ namespace tmockserver::messages {
         virtual ~BaseMessage() = default;
 
         virtual void Print() const;
-        std::unique_ptr<char[]> CreateBuffer();
+        virtual void Send(const Socket &socket) const;
 
-    protected:
+        [[nodiscard]] std::unique_ptr<char[]> CreateBuffer() const;
+
         static constexpr std::size_t Size() {
             return sizeof(m_size) + sizeof(m_type);
         }
