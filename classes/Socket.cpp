@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <cstring>
+#include <iostream>
 
 namespace tmockserver {
     /* Constructor for server socket
@@ -45,6 +46,8 @@ namespace tmockserver {
      * port: int - value of the port (ex. value: 7777)
      * (optional) ip_address: string - IP Address on which socket should be bound (ex. value: "192.168.1.10")
      *
+     *  Assigns bind parameters and gives socket local address.
+     *
      * Returns ...
      */
     bool Socket::Bind(const unsigned short int port, const std::optional<std::string> &ip_address) {
@@ -53,24 +56,40 @@ namespace tmockserver {
         m_address.sin_port = htons(port); // Saved in network byte order
         m_address.sin_family = m_address_family; // m_address_family parameter is assigned during object's construction
 
-        // Checks if IP Address is provided, if so
+        // Checks if IP Address is provided
         if (ip_address.has_value()) {
+            // If is provided, assigns that ip to parameter
             inet_pton(m_address_family, ip_address.value().c_str(), &m_address.sin_addr);
         } else {
+            // If no, default option is set to any address
             m_address.sin_addr.s_addr = htonl(INADDR_ANY);
         }
-
+        // Bind's socket to local address
         return bind(m_socket, reinterpret_cast<sockaddr*>(&m_address), sizeof(m_address)) == 0;
     }
 
+    /**
+    * Prepare to accept connections on socket FD.
+    * N connection requests will be queued before further requests are refused.
+     */
     void Socket::Listen() const {
-        if (listen(m_socket, SOMAXCONN) == -1) throw Exception(strerror(errno));
+        try {
+            if (listen(m_socket, SOMAXCONN) == -1) throw Exception(strerror(errno));
+        }
+        catch (const Exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
     }
 
     Socket Socket::Accept() const {
-        sockaddr_in client_addr {};
-        int client_len = sizeof(client_addr);
-        return {accept(m_socket, reinterpret_cast<sockaddr*>(&client_addr), reinterpret_cast<socklen_t*>(&client_len))};
+        try {
+            sockaddr_in client_addr {};
+            int client_len = sizeof(client_addr);
+            return {accept(m_socket, reinterpret_cast<sockaddr*>(&client_addr), reinterpret_cast<socklen_t*>(&client_len))};
+        } catch (const Exception& e) {
+            std::cerr << e.what() << std::endl;
+            return -1;
+        }
     }
 
     void Socket::Read(void *buffer, unsigned int size) const {
