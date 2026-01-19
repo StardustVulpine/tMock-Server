@@ -7,13 +7,6 @@
 #include <utility>
 
 namespace tmockserver::messages {
-    ConnectRequest::ConnectRequest(std::stringstream stream) : BaseMessage(stream)
-    {
-        stream.read(&m_textSize, sizeof(m_textSize));
-        stream.read(m_textContent.data(), MAX_TEXT_LENGTH);
-        m_textContent[MAX_TEXT_LENGTH] = '\0';
-    }
-
     ConnectRequest::ConnectRequest(const std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const Socket& client_socket)
     : BaseMessage(msgSize, MessageTypes::CONNECT_REQUEST)
     {
@@ -39,21 +32,10 @@ namespace tmockserver::messages {
     {
     }
 
-    ConnectRequest ConnectRequest::Get(const Socket &socket) {
-        const auto msgBuffer = std::make_unique<char[]>(Size());
-        socket.Read(msgBuffer.get(), Size());
-        std::stringstream ss;
-        ss.write(msgBuffer.get(), Size());
-        ConnectRequest i_msg(std::move(ss));
-
-        return i_msg;
-    }
-
     void ConnectRequest::Print() const {
         BaseMessage::Print();
 
         std::println(std::cout, "Text Size: {:d}", m_textSize);
         std::println(std::cout, "Text Content: {}", m_textContent);
-        std::println(std::cout, "---");
     }
 } // tmockserver::messages

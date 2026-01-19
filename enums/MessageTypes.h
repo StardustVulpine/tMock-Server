@@ -17,6 +17,6 @@ namespace tmockserver {
         /* Some other messages here will be added later */
 
         REQUEST_PASSWORD = 0x25,        // Server -> Client
-        LOGIN_WITH_PASSWORD = 0x26,     // Client -> Server
+        RECEIVE_PASSWORD = 0x26,     // Client -> Server
     };
 }

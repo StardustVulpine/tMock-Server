@@ -6,3 +6,5 @@
 
 #include "messages/ConnectRequest.hpp"
 #include "messages/FatalErrorMessage.hpp"
+#include "messages/RequestPasswordMessage.hpp"
+#include "messages/RecievePasswordMessage.hpp"
