@@ -32,13 +32,29 @@ namespace tmockserver {
     /* Constructor for client socket
      *
      */
-    Socket::Socket(Socket_T socket) : m_socket(socket) {
+    Socket::Socket(const Socket_T socket, const sockaddr_in address) : m_socket(socket), m_address(address) {
         if (m_socket == INVALID_SOCKET) throw Exception(strerror(errno));
     }
 
     /* Deconstructor for socket objects */
     Socket::~Socket() {
-        //close(m_socket);
+        if (m_socket != INVALID_SOCKET)
+            close(m_socket);
+    }
+
+    Socket::Socket(Socket &&socket) {
+        m_socket = socket.m_socket;
+        m_address = socket.m_address;
+        m_address_family = socket.m_address_family;
+        socket.m_socket = INVALID_SOCKET;
+    }
+
+    Socket &Socket::operator=(Socket &&socket) {
+        m_socket = socket.m_socket;
+        m_address = socket.m_address;
+        m_address_family = socket.m_address_family;
+        socket.m_socket = INVALID_SOCKET;
+        return *this;
     }
 
     /* Method for binding server's socket to specified port with optional filter for specific IP address
@@ -48,7 +64,6 @@ namespace tmockserver {
      *
      *  Assigns bind parameters and gives socket local address.
      *
-     * Returns ...
      */
     bool Socket::Bind(const unsigned short int port, const std::optional<std::string> &ip_address) {
 
@@ -85,10 +100,10 @@ namespace tmockserver {
         try {
             sockaddr_in client_addr {};
             int client_len = sizeof(client_addr);
-            return {accept(m_socket, reinterpret_cast<sockaddr*>(&client_addr), reinterpret_cast<socklen_t*>(&client_len))};
+            return {accept(m_socket, reinterpret_cast<sockaddr*>(&client_addr), reinterpret_cast<socklen_t*>(&client_len)), {client_addr}};
         } catch (const Exception& e) {
             std::cerr << e.what() << std::endl;
-            return -1;
+            return {-1, {}};
         }
     }
 
@@ -104,5 +119,19 @@ namespace tmockserver {
         if (write(m_socket, buffer, size) == -1) {
             throw Exception(strerror(errno));
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    std::string Socket::GetAddress() const {
+        const uint32_t address = m_address.sin_addr.s_addr;
+        std::string res = std::to_string((address) & 0xFF);
+        res += "." + std::to_string((address >> 8) & 0xFF);
+        res += "." + std::to_string((address >> 16) & 0xFF);
+        res += "." + std::to_string((address >> 24) & 0xFF);
+
+        return res;
     }
 } // tmockserver
