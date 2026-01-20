@@ -22,7 +22,7 @@ Current client-server communication capabilities:
 - Checks if password matches the one set in constexpr variable.
 - Send "Fatal Error" message type to a client with a content depending on password recieved.
 
-## Currently Supported TNP Messages
+## Currently Supported TNP Packets
 | ID/Packet Type (int) | ID/Packet Type (byte) | Message Name | Direction |
 | :---: | :---: | --- | --- |
 |  1 | 0x01 | Connect Request | Client -> Server |
