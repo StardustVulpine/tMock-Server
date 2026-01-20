@@ -23,7 +23,7 @@ Current client-server communication capabilities:
 - Send "Fatal Error" message type to a client with a content depending on password recieved.
 
 ## Currently Supported TNP Packets
-| ID/Packet Type (int) | ID/Packet Type (byte) | Message Name | Direction |
+| ID (int) | ID (byte) | Message Name | Direction |
 | :---: | :---: | --- | --- |
 |  1 | 0x01 | Connect Request | Client -> Server |
 |  2 | 0x02 | Fatal Error / Disconnect | Server -> Client |
