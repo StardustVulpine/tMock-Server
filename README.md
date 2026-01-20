@@ -57,7 +57,7 @@ Every packet sent in either direction uses the same base package structure.
 
 This is the first message sent by the client to the server when it connects. It notifies server of the Terraria Network Protocol version client use.
 
-<details>
+<details open>
 <summary>
   Structure Details
 </summary>
@@ -74,7 +74,7 @@ This is the first message sent by the client to the server when it connects. It 
 
 **Type/ID:** `0x02`
 
-<details>
+<details open>
 <summary>
   Structure Details
 </summary>
@@ -93,7 +93,7 @@ This is the first message sent by the client to the server when it connects. It 
 
 **Type/ID:** `0x25`
 
-<details>
+<details open>
 <summary>
   Structure Details
 </summary>
@@ -110,7 +110,7 @@ This is the first message sent by the client to the server when it connects. It 
 
 This message is very similar to [#1](#connect-request-1). Client sends to a server packet with 
 
-<details>
+<details open>
 <summary>
   Structure Details
 </summary>
