@@ -27,8 +27,8 @@ namespace tmockserver {
         Socket(const Socket& socket) = delete;
         Socket& operator=(const Socket& socket) = delete;
 
-        Socket(Socket&& socket);
-        Socket& operator=(Socket&& socket);
+        Socket(Socket&& socket) noexcept ;
+        Socket& operator=(Socket&& socket) noexcept ;
 
         bool Bind(unsigned short int port, const std::optional<std::string> &ip_address=std::nullopt);
         void Listen() const;
