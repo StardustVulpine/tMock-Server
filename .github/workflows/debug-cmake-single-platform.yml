@@ -4,9 +4,13 @@ name: Debug Build on Linux
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches:
+      - dev
   pull_request:
-    branches: [ $default-branch ]
+    branches:
+      - master
+  workflow_dispatch:
+
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -24,16 +28,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
-
-    - name: Install dependencies
-      run: |
-        apt install cmake
-
-    - name: Clear CMake build directories
-      run: |
-        i [ -d Build ]; then
-          rm -rf Build
-        fi
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
