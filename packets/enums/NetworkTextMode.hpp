@@ -3,12 +3,13 @@
 //
 
 #pragma once
+
 #include <type_traits>
 #include <cstddef>
 
-namespace tmockserver {
+namespace tmockserver::messages {
     // In HEX byte values
-    enum class TextModes : std::underlying_type_t<std::byte> {
+    enum class NetworkTextMode : std::underlying_type_t<std::byte> {
         LITERAL = 0x00,
         FORMATTABLE = 0x01,
         LOCALIZATION_KEY = 0x02,

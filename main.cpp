@@ -1,10 +1,10 @@
 #include <iostream>
 #include <memory>
-#include "TextModes.h"
-#include "classes/Socket.hpp"
-#include "classes/Messages.hpp"
 #include <thread>
 #include <vector>
+
+#include <Socket.hpp>
+#include "packets/Packets.hpp"
 
 constexpr int SERVER_PORT = 8090;
 constexpr int MAX_ALLOWED_CLIENTS = 3;
@@ -15,6 +15,7 @@ int main()
 {
     using namespace tmockserver;
     using namespace tmockserver::messages;
+    using namespace tmockserver::networking;
 
     Socket server_socket(AddressFamily::IPv4, ConnectionType::TCP);
     server_socket.Bind(SERVER_PORT);
@@ -47,25 +48,25 @@ int main()
                 std::byte msgType = *(msgBuffer.get() + sizeof(msgSize));
 
                 // Based on message type received from client, route to catch rest of the message content.
-                switch (static_cast<MessageTypes>(msgType)) {
-                    case MessageTypes::CONNECT_REQUEST:
+                switch (static_cast<PacketType>(msgType)) {
+                    case PacketType::CONNECT_REQUEST:
                     {
                         std::println(std::cout, "Client requested connection with message details:");
                         ConnectRequest(msgSize, msgBuffer, client).Print();
-                        RequestPasswordMessage().Send(client);
+                        RequestPassword().Send(client);
                         break;
                     }
-                    case MessageTypes::RECEIVE_PASSWORD:
+                    case PacketType::RECEIVE_PASSWORD:
                     {
                         std::println(std::cout, "Client sent password.");
-                        RecievePasswordMessage recPass (msgSize, msgBuffer, client);
+                        SendPassword recPass (msgSize, msgBuffer, client);
                         recPass.Print();
                         if (recPass.Content() != SERVER_PASSWORD) {
-                            FatalErrorMessage(TextModes::LITERAL, "Tybijskie hasło").Send(client);
+                            FatalError(NetworkTextMode::LITERAL, "Tybijskie hasło").Send(client);
                             done = true;
                             break;
                         }
-                        FatalErrorMessage(TextModes::LITERAL, "Hello tMockServer!").Send(client);
+                        FatalError(NetworkTextMode::LITERAL, "Hello tMockServer!").Send(client);
                         done = true;
                         break;
                     }

@@ -2,28 +2,27 @@
 // Created by stardustvulpine on 15/1/26.
 //
 
-#include "FatalErrorMessage.hpp"
+#include "FatalError.hpp"
 
 #include <iostream>
-#include <MessageTypes.h>
 
-#include "Exception.hpp"
+#include <Exception.hpp>
 
 namespace tmockserver::messages {
-    FatalErrorMessage::FatalErrorMessage (
-        const TextModes textMode,
+    FatalError::FatalError (
+        const NetworkTextMode textMode,
         const std::string_view text
-    ) : BaseMessage(text.size()+5, MessageTypes::FATAL_ERROR) {
+    ) : BaseMessage(text.size()+5, PacketType::FATAL_ERROR) {
         m_networkTextMode = static_cast<char>(textMode);
         m_textSize = text.size();
         m_textContent = text;
     }
 
-    void FatalErrorMessage::Print() const {
+    void FatalError::Print() const {
 
     }
 
-    void FatalErrorMessage::Send(const Socket &socket) const {
+    void FatalError::Send(const networking::Socket &socket) const {
         try {
             auto [fst, snd] = GetContent();
             socket.Write(fst.get(), snd);
@@ -32,7 +31,7 @@ namespace tmockserver::messages {
         }
     }
 
-    std::pair<std::unique_ptr<char[]>, size_t> FatalErrorMessage::GetContent() const {
+    std::pair<std::unique_ptr<char[]>, size_t> FatalError::GetContent() const {
         auto buffer = CreateBuffer();
         char* ptr = buffer.get();
 

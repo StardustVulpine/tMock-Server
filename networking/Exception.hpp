@@ -8,6 +8,6 @@
 namespace tmockserver {
     class Exception : public std::runtime_error {
         public:
-        Exception(std::string message);
+        explicit Exception(const std::string& message);
     };
 } // tmockserver

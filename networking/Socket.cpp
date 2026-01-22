@@ -11,7 +11,7 @@
 #include <cstring>
 #include <iostream>
 
-namespace tmockserver {
+namespace tmockserver::networking {
     /* Constructor for server socket
      * Takes:
      * address_family - from enum (AddressFamily::IPv4 or AddressFamily::IPv6)
@@ -42,14 +42,14 @@ namespace tmockserver {
             close(m_socket);
     }
 
-    Socket::Socket(Socket &&socket) {
+    Socket::Socket(Socket &&socket) noexcept{
         m_socket = socket.m_socket;
         m_address = socket.m_address;
         m_address_family = socket.m_address_family;
         socket.m_socket = INVALID_SOCKET;
     }
 
-    Socket &Socket::operator=(Socket &&socket) {
+    Socket &Socket::operator=(Socket &&socket) noexcept{
         m_socket = socket.m_socket;
         m_address = socket.m_address;
         m_address_family = socket.m_address_family;

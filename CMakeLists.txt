@@ -1,33 +1,32 @@
 cmake_minimum_required(VERSION 4.1)
-project(terraria_mock_server)
+project(tmock_server)
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_executable(terraria_mock_server main.cpp
-        # Enums
-        enums/AddressFamily.h
-        enums/ConnectionType.h
-        enums/MessageTypes.h
-        enums/TextModes.h
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    add_compile_options(-Wall -Wextra -Werror)
+    add_compile_definitions(DEBUG)
+endif ()
 
-        # Classes
-        classes/Socket.cpp
-        classes/Socket.hpp
-        classes/Exception.cpp
-        classes/Exception.hpp
-        classes/Log.cpp
-        classes/Log.hpp
-        classes/Messages.hpp
-        classes/messages/BaseMessage.cpp
-        classes/messages/BaseMessage.hpp
-        classes/messages/ConnectRequest.cpp
-        classes/messages/ConnectRequest.hpp
-        classes/messages/FatalErrorMessage.cpp
-        classes/messages/FatalErrorMessage.hpp
-        classes/messages/RequestPasswordMessage.cpp
-        classes/messages/RequestPasswordMessage.hpp
-        classes/messages/RecievePasswordMessage.cpp
-        classes/messages/RecievePasswordMessage.hpp
+set(EXECUTABLES_LIST
+        main.cpp
+)
+add_executable(${PROJECT_NAME} ${EXECUTABLES_LIST})
+
+set(LIB_LINK_TARGETS
+        tmock_networking
+        tmock_packets
+)
+target_link_libraries(${PROJECT_NAME} ${LIB_LINK_TARGETS})
+add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})
+
+add_subdirectory(networking)
+add_subdirectory(packets)
+
+set(DIRECTORIES
+
 )
 
-TARGET_INCLUDE_DIRECTORIES(terraria_mock_server PRIVATE classes enums structs)
+if (${DIRECOTIRES})
+    target_include_directories(${PROJECT_NAME} PRIVATE ${DIRECTORIES})
+endif ()

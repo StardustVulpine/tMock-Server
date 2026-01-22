@@ -4,10 +4,9 @@
 
 #pragma once
 
-namespace tmockserver {
+namespace tmockserver::networking {
     enum class AddressFamily {
         IPv4 = 0,
         IPv6
     };
 }
-
