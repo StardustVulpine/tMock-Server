@@ -5,7 +5,7 @@
 #include "Exception.hpp"
 
 namespace tmockserver {
-    Exception::Exception(std::string message) : std::runtime_error(message) {
+    Exception::Exception(const std::string& message) : std::runtime_error(message) {
 
     }
 

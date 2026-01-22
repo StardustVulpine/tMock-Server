@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace tmockserver {
+namespace tmockserver::networking {
     enum class ConnectionType {
         TCP = 0,
         UDP

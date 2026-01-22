@@ -3,9 +3,11 @@
 //
 
 #include "BaseMessage.hpp"
-#include <iostream>
 
-#include "TextModes.h"
+#include <iostream>
+#include <sstream>
+
+#include "../enums/NetworkTextMode.hpp"
 
 namespace tmockserver::messages {
     BaseMessage::BaseMessage(std::stringstream &stream) {
@@ -13,7 +15,7 @@ namespace tmockserver::messages {
         stream.read(&m_type, sizeof(m_type));
     }
 
-    BaseMessage::BaseMessage(const std::size_t size, const MessageTypes type) {
+    BaseMessage::BaseMessage(const std::size_t size, const PacketType type) {
         m_size = static_cast<short int>(size);
         m_type = enumTo<char>(type);
     }
@@ -23,10 +25,9 @@ namespace tmockserver::messages {
         std::println(std::cout, "Message Type: {:d}", m_type);
     }
 
-    void BaseMessage::Send(const Socket &socket) const {
+    void BaseMessage::Send(const networking::Socket &socket [[maybe_unused]]) const {
 
     }
-
 
     std::unique_ptr<char[]> BaseMessage::CreateBuffer() const {
         auto buffer = std::make_unique<char[]>(m_size);

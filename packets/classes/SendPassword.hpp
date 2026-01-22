@@ -6,11 +6,11 @@
 #include "BaseMessage.hpp"
 
 namespace tmockserver::messages {
-    class RecievePasswordMessage : public BaseMessage {
+    class SendPassword : public BaseMessage {
     public:
-        RecievePasswordMessage(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const Socket& client_socket);
+        SendPassword(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket);
 
-        ~RecievePasswordMessage() override = default;
+        ~SendPassword() override = default;
 
         void Print() const override;
 

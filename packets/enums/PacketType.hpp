@@ -7,9 +7,9 @@
 #include <type_traits>
 #include <cstddef>
 
-namespace tmockserver {
+namespace tmockserver::messages {
     // In HEX byte values
-    enum class MessageTypes : std::underlying_type_t<std::byte> {
+    enum class PacketType : std::underlying_type_t<std::byte> {
         CONNECT_REQUEST = 0x01,          // Client -> Server
         FATAL_ERROR = 0x02,              // Server -> Client
         CONNECTION_APPROVED = 0x03,      // Server -> Client

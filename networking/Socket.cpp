@@ -11,7 +11,7 @@
 #include <cstring>
 #include <iostream>
 
-namespace tmockserver {
+namespace tmockserver::networking {
     /* Constructor for server socket
      * Takes:
      * address_family - from enum (AddressFamily::IPv4 or AddressFamily::IPv6)

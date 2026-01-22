@@ -2,15 +2,17 @@
 // Created by stardustvulpine on 1/17/26.
 //
 
-#include "RequestPasswordMessage.hpp"
+#include "RequestPassword.hpp"
 
 #include <iostream>
-#include "Exception.hpp"
+
+#include "../enums/PacketType.hpp"
+#include <Exception.hpp>
 
 namespace tmockserver::messages {
-    RequestPasswordMessage::RequestPasswordMessage() : BaseMessage(3, MessageTypes::REQUEST_PASSWORD){}
+    RequestPassword::RequestPassword() : BaseMessage(3, PacketType::REQUEST_PASSWORD){}
 
-    void RequestPasswordMessage::Send(const Socket &socket) const {
+    void RequestPassword::Send(const networking::Socket &socket) const {
         try {
             const auto buffer = CreateBuffer();
             socket.Write(buffer.get(), Size());

@@ -3,19 +3,20 @@
 //
 
 #include "ConnectRequest.hpp"
+
 #include <iostream>
 #include <utility>
 
 namespace tmockserver::messages {
-    ConnectRequest::ConnectRequest(const std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const Socket& client_socket)
-    : BaseMessage(msgSize, MessageTypes::CONNECT_REQUEST)
+    ConnectRequest::ConnectRequest(const std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket)
+    : BaseMessage(msgSize, PacketType::CONNECT_REQUEST)
     {
         buffer = std::make_unique<std::byte[]>(msgSize);
         client_socket.Read(buffer.get() + BaseMessage::Size(), msgSize - BaseMessage::Size());
         std::byte* ptr = buffer.get();
         *reinterpret_cast<short int *>(ptr) = static_cast<short int>(msgSize);
         ptr += 2;
-        *ptr = static_cast<std::byte>(MessageTypes::CONNECT_REQUEST);
+        *ptr = static_cast<std::byte>(PacketType::CONNECT_REQUEST);
         ptr++;
         m_textSize = static_cast<char>(*ptr);
         ptr++;
@@ -28,7 +29,7 @@ namespace tmockserver::messages {
         const std::size_t msgSize,
         const std::size_t txtSize,
         std::string text
-    ) : BaseMessage(msgSize, MessageTypes::CONNECT_REQUEST), m_textSize(static_cast<char>(txtSize)), m_textContent(std::move(text))
+    ) : BaseMessage(msgSize, PacketType::CONNECT_REQUEST), m_textSize(static_cast<char>(txtSize)), m_textContent(std::move(text))
     {
     }
 

@@ -9,14 +9,14 @@
 #include <netinet/in.h>
 #include <format>
 
-#include "../enums/AddressFamily.h"
-#include "../enums/ConnectionType.h"
+#include "AddressFamily.hpp"
+#include "ConnectionType.hpp"
 
 using Socket_T = int;
 
 constexpr Socket_T INVALID_SOCKET = -1;
 
-namespace tmockserver {
+namespace tmockserver::networking {
     class Socket {
     public:
         Socket() = default;
@@ -49,11 +49,13 @@ namespace tmockserver {
 } // tmockserver
 
 template <>
-struct std::formatter<tmockserver::Socket> : std::formatter<std::string> {
-    auto format(const tmockserver::Socket &socket, format_context& ctx) const {
+struct std::formatter<tmockserver::networking::Socket> : std::formatter<std::string> {
+    auto format(const tmockserver::networking::Socket &socket, format_context& ctx) const {
         return formatter<string>::format(
           std::format("[Socket Details]\n IP Address: {}", socket.GetAddress()), ctx);
     }
 };
+
+
 
 

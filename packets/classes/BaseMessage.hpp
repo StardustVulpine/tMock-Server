@@ -5,22 +5,23 @@
 #pragma once
 
 #include <memory>
-#include <sstream>
-#include <MessageTypes.h>
 
-#include "Socket.hpp"
+
+#include "../enums/PacketType.hpp"
+
+#include <Socket.hpp>
 
 namespace tmockserver::messages {
     class BaseMessage {
     public:
         explicit BaseMessage(std::stringstream& stream);
-        BaseMessage(std::size_t size, MessageTypes type);
+        BaseMessage(std::size_t size, PacketType type);
 
 
         virtual ~BaseMessage() = default;
 
         virtual void Print() const;
-        virtual void Send(const Socket &socket) const;
+        virtual void Send(const networking::Socket &socket) const;
 
         [[nodiscard]] std::unique_ptr<char[]> CreateBuffer() const;
 
