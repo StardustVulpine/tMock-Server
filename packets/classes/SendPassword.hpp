@@ -5,7 +5,7 @@
 #pragma once
 #include "BaseMessage.hpp"
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     class SendPassword : public BaseMessage {
     public:
         SendPassword(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket);

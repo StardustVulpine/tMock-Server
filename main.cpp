@@ -1,27 +1,33 @@
 #include <iostream>
+#include <fstream>
 #include <memory>
 #include <thread>
 #include <vector>
-
 #include <Socket.hpp>
-#include "packets/Packets.hpp"
+#include <Packets.hpp>
+#include "extern_lib/json.hpp"
 
-constexpr int SERVER_PORT = 8090;
-constexpr int MAX_ALLOWED_CLIENTS = 3;
-constexpr std::string SERVER_PASSWORD = "dupa";
+using json = nlohmann::json;
+
+json load_server_config();
 
 [[noreturn]]
 int main()
 {
     using namespace tmockserver;
-    using namespace tmockserver::messages;
+    using namespace tmockserver::packets;
     using namespace tmockserver::networking;
 
+    json server_config = load_server_config();
+    auto port = server_config["port"].get<int>();
+    auto max_clients = server_config["max_clients"].get<unsigned>();
+    auto password = server_config["password"].get<std::string>();
+
     Socket server_socket(AddressFamily::IPv4, ConnectionType::TCP);
-    server_socket.Bind(SERVER_PORT);
+    server_socket.Bind(port);
     server_socket.Listen();
     std::println(std::cout, "\033[38;2;0;255;1m {} \033[0m", "Server Started!");
-    std::println(std::cout, "\033[38;2;255;250;115m {} {}\033[0m", "Listening on port:", SERVER_PORT);
+    std::println(std::cout, "\033[38;2;255;250;115m {} {}\033[0m", "Listening on port:", port);
 
     std::vector<std::thread> connected_clients;
 
@@ -30,12 +36,12 @@ int main()
         std::println(std::cout, "Awaiting client connection...");
 
         Socket client_socket = server_socket.Accept();
-        if (connected_clients.size() == MAX_ALLOWED_CLIENTS)
+        if (connected_clients.size() == max_clients)
         {
 
         }
 
-        std::thread client_thread {[client = std::move(client_socket), &connected_clients]()
+        std::thread client_thread {[client = std::move(client_socket), password]()
         {
             bool done = false;
             while (!done) {
@@ -61,7 +67,7 @@ int main()
                         std::println(std::cout, "Client sent password.");
                         SendPassword recPass (msgSize, msgBuffer, client);
                         recPass.Print();
-                        if (recPass.Content() != SERVER_PASSWORD) {
+                        if (recPass.Content() != password) {
                             FatalError(NetworkTextMode::LITERAL, "Tybijskie hasło").Send(client);
                             done = true;
                             break;
@@ -79,4 +85,10 @@ int main()
         connected_clients.emplace_back(std::move(client_thread));
         //std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
+}
+
+json load_server_config() {
+    std::ifstream fs("server-config.json");
+    return json::parse(fs);
+
 }

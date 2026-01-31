@@ -5,7 +5,7 @@
 #pragma once
 #include "BaseMessage.hpp"
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     class RequestPassword : public BaseMessage {
     public:
         RequestPassword();

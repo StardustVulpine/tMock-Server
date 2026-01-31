@@ -11,7 +11,7 @@
 
 #include <Socket.hpp>
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     class BaseMessage {
     public:
         explicit BaseMessage(std::stringstream& stream);

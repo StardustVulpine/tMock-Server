@@ -10,6 +10,7 @@ endif ()
 
 set(EXECUTABLES_LIST
         main.cpp
+        extern_lib/json.hpp
 )
 add_executable(${PROJECT_NAME} ${EXECUTABLES_LIST})
 
@@ -30,3 +31,5 @@ set(DIRECTORIES
 if (${DIRECOTIRES})
     target_include_directories(${PROJECT_NAME} PRIVATE ${DIRECTORIES})
 endif ()
+
+file(COPY "${CMAKE_SOURCE_DIR}/server-config.json" DESTINATION "${CMAKE_BINARY_DIR}")

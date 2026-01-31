@@ -7,7 +7,7 @@
 #include "BaseMessage.hpp"
 #include "../enums/PacketType.hpp"
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     class ConnectRequest : public BaseMessage {
     public:
         ConnectRequest(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket);
