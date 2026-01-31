@@ -9,7 +9,7 @@
 #include "../enums/PacketType.hpp"
 #include <Exception.hpp>
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     RequestPassword::RequestPassword() : BaseMessage(3, PacketType::REQUEST_PASSWORD){}
 
     void RequestPassword::Send(const networking::Socket &socket) const {

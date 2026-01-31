@@ -7,7 +7,7 @@
 
 #include "../enums/PacketType.hpp"
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     SendPassword::SendPassword
     (
         const std::size_t msgSize,

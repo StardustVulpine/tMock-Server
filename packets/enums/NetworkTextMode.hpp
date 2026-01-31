@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <cstddef>
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     // In HEX byte values
     enum class NetworkTextMode : std::underlying_type_t<std::byte> {
         LITERAL = 0x00,

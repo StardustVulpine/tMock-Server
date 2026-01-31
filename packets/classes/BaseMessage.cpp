@@ -9,7 +9,7 @@
 
 #include "../enums/NetworkTextMode.hpp"
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     BaseMessage::BaseMessage(std::stringstream &stream) {
         stream.read(reinterpret_cast<char*>(&m_size), sizeof(m_size));
         stream.read(&m_type, sizeof(m_type));

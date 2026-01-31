@@ -1,0 +1,5 @@
+{
+  "port": 8090,
+  "max_clients": 3,
+  "password": "dupa"
+}

@@ -7,7 +7,7 @@
 #include "BaseMessage.hpp"
 #include "../enums/NetworkTextMode.hpp"
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     class FatalError : public BaseMessage {
     public:
         FatalError(NetworkTextMode textMode, std::string_view text);

@@ -8,7 +8,7 @@
 
 #include <Exception.hpp>
 
-namespace tmockserver::messages {
+namespace tmockserver::packets {
     FatalError::FatalError (
         const NetworkTextMode textMode,
         const std::string_view text
