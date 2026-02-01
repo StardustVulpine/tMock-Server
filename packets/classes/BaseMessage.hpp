@@ -14,7 +14,6 @@
 namespace tmockserver::packets {
     class BaseMessage {
     public:
-        explicit BaseMessage(std::stringstream& stream);
         BaseMessage(std::size_t size, PacketType type);
 
 
@@ -30,7 +29,7 @@ namespace tmockserver::packets {
         }
     private:
         short int m_size{};
-        char m_type{};
+        std::byte m_type{};
 
     };
 } // tmockserver::messages

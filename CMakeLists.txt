@@ -32,4 +32,4 @@ if (${DIRECOTIRES})
     target_include_directories(${PROJECT_NAME} PRIVATE ${DIRECTORIES})
 endif ()
 
-file(COPY "${CMAKE_SOURCE_DIR}/server-config.json" DESTINATION "${CMAKE_BINARY_DIR}")
+file(COPY_FILE "${CMAKE_SOURCE_DIR}/server-config.json" "${CMAKE_BINARY_DIR}/server-config.json")
