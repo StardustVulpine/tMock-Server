@@ -19,6 +19,7 @@ int main()
     using namespace tmockserver::networking;
 
     json server_config = load_server_config();
+    auto server_version = server_config["server_version"].get<int>();
     auto port = server_config["port"].get<int>();
     auto max_clients = server_config["max_clients"].get<unsigned>();
     auto password = server_config["password"].get<std::string>();
@@ -41,7 +42,7 @@ int main()
 
         }
 
-        std::thread client_thread {[client = std::move(client_socket), password]()
+        std::thread client_thread {[client = std::move(client_socket), password, server_version]()
         {
             std::println(std::cout, "\033[38;2;0;255;0m {} {} \033[0m", "Client connected from", client.GetAddress());
             bool done = false;
@@ -57,8 +58,18 @@ int main()
                 switch (static_cast<PacketType>(msgType)) {
                     case PacketType::CONNECT_REQUEST:
                     {
-                        ConnectRequest(msgSize, msgBuffer, client).Print();
-                        RequestPassword().Send(client);
+                        ConnectRequest connect_request (msgSize, msgBuffer, client);
+                        connect_request.Print();
+                        if (connect_request.GetClientVersion() != server_version) {
+                            FatalError(NetworkTextMode::LITERAL, "Server doesn't support this version of game.").Send(client);
+                            done = true;
+                            break;
+                        }
+                        if (!password.empty()) {
+                            RequestPassword().Send(client);
+                            break;
+                        }
+                        ConnectionApproved(1).Send(client);
                         break;
                     }
                     case PacketType::RECEIVE_PASSWORD:

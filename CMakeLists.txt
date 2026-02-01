@@ -11,6 +11,7 @@ endif ()
 set(EXECUTABLES_LIST
         main.cpp
         extern_lib/json.hpp
+        Configs.hpp
 )
 add_executable(${PROJECT_NAME} ${EXECUTABLES_LIST})
 
@@ -32,4 +33,5 @@ if (${DIRECOTIRES})
     target_include_directories(${PROJECT_NAME} PRIVATE ${DIRECTORIES})
 endif ()
 
-file(COPY_FILE "${CMAKE_SOURCE_DIR}/server-config.json" "${CMAKE_BINARY_DIR}/server-config.json")
+#file(COPY_FILE "${CMAKE_SOURCE_DIR}/server-config.json" "${CMAKE_BINARY_DIR}/server-config.json")
+configure_file("${CMAKE_SOURCE_DIR}/server-config.json" "${CMAKE_BINARY_DIR}/server-config.json")

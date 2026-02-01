@@ -1,4 +1,5 @@
 {
+  "server_version": 316,
   "port": 7779,
   "max_clients": 3,
   "password": "dupa"

@@ -40,4 +40,13 @@ namespace tmockserver::packets {
         std::println(std::cout, "Text Size: {:d}", static_cast<char>(m_textSize));
         std::println(std::cout, R"(Text Content: "{}")", m_textContent);
     }
+
+    std::expected<int, ConnectRequest::VersionError> ConnectRequest::GetClientVersion() const {
+        int version{};
+        std::string ver_s = m_textContent.substr(8,3);
+        if (std::from_chars(ver_s.data(), ver_s.data() + ver_s.length(), version)) {
+            return version;
+        }
+        return std::unexpected(VersionError::BadVersion);
+    }
 } // tmockserver::messages
