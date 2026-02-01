@@ -4,10 +4,15 @@
 
 #pragma once
 
-#include "classes/ConnectRequest.hpp"
-#include "classes/FatalError.hpp"
-#include "classes/RequestPassword.hpp"
-#include "classes/SendPassword.hpp"
+// Server Packets
+#include "classes/server/FatalError.hpp"
+#include "classes/server/RequestPassword.hpp"
+#include "classes/server/ConnectionApproved.hpp"
 
+// Client Packets
+#include "classes/client/ConnectRequest.hpp"
+#include "classes/client/SendPassword.hpp"
+
+// Enums
 #include "enums/PacketType.hpp"
 #include "enums/NetworkTextMode.hpp"

@@ -4,11 +4,15 @@ project(tmock_packets)
 set(CMAKE_CXX_STANDARD 26)
 
 set(LIB_SOURCES
-        classes/BaseMessage.cpp
-        classes/ConnectRequest.cpp
-        classes/FatalError.cpp
-        classes/RequestPassword.cpp
-        classes/SendPassword.cpp
+        classes/BasePacket.cpp
+
+        classes/client/ConnectRequest.cpp
+        classes/client/SendPassword.cpp
+
+        classes/server/FatalError.cpp
+        classes/server/RequestPassword.cpp
+        classes/server/ConnectionApproved.cpp
+        classes/server/ConnectionApproved.hpp
 )
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
 
