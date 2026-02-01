@@ -57,7 +57,7 @@ int main()
                 switch (static_cast<PacketType>(msgType)) {
                     case PacketType::CONNECT_REQUEST:
                     {
-                        std::println(std::cout, "Client requested connection with message details:");
+                        std::println(std::cout, "Client requested connection.");
                         ConnectRequest(msgSize, msgBuffer, client).Print();
                         RequestPassword().Send(client);
                         break;

@@ -37,6 +37,6 @@ namespace tmockserver::packets {
         BaseMessage::Print();
 
         std::println(std::cout, "Text Size: {:d}", m_textSize);
-        std::println(std::cout, "Text Content: {}", m_textContent);
+        std::println(std::cout, R"(Text Content: "{}")", m_textContent);
     }
 } // tmockserver::messages

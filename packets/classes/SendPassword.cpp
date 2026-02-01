@@ -33,6 +33,6 @@ namespace tmockserver::packets {
         BaseMessage::Print();
 
         std::println(std::cout, "Text Size: {:d}", m_passwordSize);
-        std::println(std::cout, "Text Content: {}", m_passwordContent);
+        std::println(std::cout, R"(Text Content: "{}")", m_passwordContent);
     }
 }
