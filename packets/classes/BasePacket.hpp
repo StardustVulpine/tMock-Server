@@ -6,23 +6,22 @@
 
 #include <memory>
 
-
 #include "../enums/PacketType.hpp"
 
 #include <Socket.hpp>
 
 namespace tmockserver::packets {
-    class BaseMessage {
+    class BasePacket {
     public:
-        BaseMessage(std::size_t size, PacketType type);
+        BasePacket(std::size_t size, PacketType type);
 
 
-        virtual ~BaseMessage() = default;
+        virtual ~BasePacket() = default;
 
         virtual void Print() const;
         virtual void Send(const networking::Socket &socket) const;
 
-        [[nodiscard]] std::unique_ptr<char[]> CreateBuffer() const;
+        [[nodiscard]] std::unique_ptr<std::byte[]> CreateBuffer() const;
 
         static constexpr std::size_t Size() {
             return sizeof(m_size) + sizeof(m_type);
@@ -30,6 +29,8 @@ namespace tmockserver::packets {
     private:
         short int m_size{};
         std::byte m_type{};
+
+        std::string GetMessageTypeName() const;
 
     };
 } // tmockserver::messages

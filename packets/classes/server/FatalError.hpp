@@ -4,23 +4,23 @@
 
 #pragma once
 
-#include "BaseMessage.hpp"
-#include "../enums/NetworkTextMode.hpp"
+#include "../BasePacket.hpp"
+#include "../../enums/NetworkTextMode.hpp"
 
 namespace tmockserver::packets {
-    class FatalError : public BaseMessage {
+    class FatalError : public BasePacket {
     public:
         FatalError(NetworkTextMode textMode, std::string_view text);
         ~FatalError() override = default;
 
         void Print() const override;
         void Send(const networking::Socket &socket) const override;
-        [[nodiscard]] std::pair<std::unique_ptr<char[]>, size_t> GetContent() const;
+        [[nodiscard]] std::pair<std::unique_ptr<std::byte[]>, size_t> GetContent() const;
 
 
     private:
-        unsigned char m_networkTextMode{};
-        unsigned char m_textSize{};
+        std::byte m_networkTextMode{};
+        std::byte m_textSize{};
         std::string m_textContent{};
 
     };

@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include "BaseMessage.hpp"
-#include "../enums/PacketType.hpp"
+#include "../BasePacket.hpp"
+#include "../../enums/PacketType.hpp"
 
 namespace tmockserver::packets {
-    class ConnectRequest : public BaseMessage {
+    class ConnectRequest : public BasePacket {
     public:
         ConnectRequest(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket);
         ConnectRequest(std::size_t msgSize, std::size_t txtSize, std::string  text);
@@ -18,7 +18,7 @@ namespace tmockserver::packets {
         void Print() const override;
 
     private:
-        char m_textSize{};
+        std::byte m_textSize{};
         std::string m_textContent{};
 
     };

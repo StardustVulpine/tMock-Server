@@ -3,10 +3,10 @@
 //
 
 #pragma once
-#include "BaseMessage.hpp"
+#include "../BasePacket.hpp"
 
 namespace tmockserver::packets {
-    class SendPassword : public BaseMessage {
+    class SendPassword : public BasePacket {
     public:
         SendPassword(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket);
 
@@ -19,7 +19,7 @@ namespace tmockserver::packets {
         }
 
     private:
-        char m_passwordSize{};
+        std::byte m_passwordSize{};
         std::string m_passwordContent{};
 
     };

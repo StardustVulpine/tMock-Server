@@ -3,12 +3,14 @@
 //
 
 #pragma once
-#include "BaseMessage.hpp"
+
+#include "../BasePacket.hpp"
 
 namespace tmockserver::packets {
-    class RequestPassword : public BaseMessage {
+    class RequestPassword : public BasePacket {
     public:
         RequestPassword();
+        void Print() const override;
         void Send(const networking::Socket &socket) const override;
     };
 }
