@@ -11,6 +11,9 @@ endif ()
 set(EXECUTABLES_LIST
         main.cpp
         extern_lib/json.hpp
+        Player.cpp
+        Player.hpp
+        Color.hpp
         Configs.hpp
 )
 add_executable(${PROJECT_NAME} ${EXECUTABLES_LIST})

@@ -1,0 +1,13 @@
+#01
+#03 if approved or #25
+if #25 -> #26
+#03 if approved or #02 if problem
+
+If approved:
+client -> #04 Player Info
+client -> #68 Client UUID
+client -> #16 Player HP
+client -> #42 Player Mana
+client -> #50 Player Buff
+client -> #147 ?
+client -> #05 Player Inventory (foreach)
