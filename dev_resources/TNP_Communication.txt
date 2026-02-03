@@ -1,15 +1,3 @@
-client -> #01 Connect Request
-if(password):
-    server -> #25 Password Request
-    client -> #26 Send Password
-
-    if(password match):
-        server -> #03 Connection Approved & Assign Server Slot
-    else:
-        server -> #2 Error
-else:
-    server -> #03 Connection Approved & Assign Server Slot
-
 If approved:
 client -> #04 Player Info
 client -> #68 Client UUID
