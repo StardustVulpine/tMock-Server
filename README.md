@@ -2,43 +2,46 @@
 Hobbistic project with a goal to reimplement Terraria Server with C++ and learn more about Sockets, Server Networking and Terraria Network Protocol communication.
 During development I use a set of tools and docummentation websites to help get up-to-date information about how Terraria Network Protocol (TNP) communicates, what messages structure looks like, what data types it uses.
 
-## Tool and Resources
-- [Wireshark](https://www.wireshark.org/)
+## Tool and Resources used during development
+- [Wireshark](https://www.wireshark.org/)'s network traffic analysis
 - Terraria Native Server
-- [Terrafirma's Documentation](https://seancode.com/terrafirma/net.html)
+- [Terrafirma Documentation](https://seancode.com/terrafirma/net.html)
 - [TShock Documentation](https://tshock.readme.io/docs/multiplayer-packet-structure)
 
 
 # Status
+
 🛠️ **Under development**🛠️
 
-Currently support's only Linux as it relies on builtin library for handling sockets.
+Server handles client's connection, protocol version verification, requesting and recieving password and assigning player slot.
 
-Current client-server communication capabilities:
-- Listen for client's connections on chosen network port.
-- Recieve client's "Connect Request" message.
-- Send Password Request to client.
-- Recieves password from clent.
-- Checks if password matches the one set in constexpr variable.
-- Send "Fatal Error" message type to a client with a content depending on password recieved.
+> [!NOTE]
+> Currently only Linux is supported as it relies on builtin socket library.
+
+## Roadmap
+
+- [x] Phase 1 - Client Connection:
+  - [x] Accept Connection from client (01) and reply with custom error message (02) 
+  - [x] Request client for password (25), recieve password (26) and reply with custom error messages depending on password match
+  - [x] Assign player slot replaying with (03) message
+- [ ] Phase 2 - Handle Player & World Information:
+  - [ ] Handle player information from client
+  - [ ] Handle world information from client
 
 ## Currently Supported TNP Packets
 | ID (int) | ID (byte) | Message Name | Direction |
 | :---: | :---: | --- | --- |
 |  1 | 0x01 | Connect Request | Client -> Server |
 |  2 | 0x02 | Fatal Error / Disconnect | Server -> Client |
+|  3 | 0x03 | Connection Approved / Assign Player Slot | Server -> Client |
 | 37 | 0x25 | Request Password | Server -> Client |
 | 38 | 0x26 | Send Password / Login with Passoword | Client -> Server |
 
-## Roadmap
-
-*(will be added later)*
-
-# TNP package structure details
+# TNP packet structure details
 Below are details about packet messages strucutres sent between Terraria's Server and Client that I currently managed to determine with help of Wireshark and avaliable documentation on the internet.
 *(this section will be updated as project grows)*
 
-## Package Structure
+## Packet Structure
 
 Every packet sent in either direction uses the same base package structure.
 | Offset | Byte Offset | Size (bytes) | Type | Description | Notes |
@@ -121,4 +124,12 @@ This message is very similar to [#1](#connect-request-1). Client sends to a serv
 | 4+ | 5+ | ? | String | Text Message Content | Password send by client |
 
 </details>
+
+
+# Communication Schema
+## Stage 1 - Initialize Connection
+![Diagram showing communication schema](/dev_resources/TNP_Communication_Map.drawio.svg)
+
+## Stage 2 - Sync Player & World Information
+WIP
 

@@ -1,0 +1,20 @@
+client -> #01 Connect Request
+if(password):
+    server -> #25 Password Request
+    client -> #26 Send Password
+
+    if(password match):
+        server -> #03 Connection Approved & Assign Server Slot
+    else:
+        server -> #2 Error
+else:
+    server -> #03 Connection Approved & Assign Server Slot
+
+If approved:
+client -> #04 Player Info
+client -> #68 Client UUID
+client -> #16 Player HP
+client -> #42 Player Mana
+client -> #50 Player Buff
+client -> #147 ?
+client -> #05 Player Inventory (foreach)
