@@ -16,6 +16,8 @@ namespace tmockserver {
     private:
         std::byte m_player_ID;
         std::byte m_skin_variant;
+        std::byte m_voice_variant;
+        float m_voice_pitch_offset;
         std::byte m_hair;     // If >162 then Set To 0
         std::string m_name;
         std::byte m_hair_dye;
