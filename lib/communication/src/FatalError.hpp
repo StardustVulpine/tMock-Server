@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "../BasePacket.hpp"
-#include "../../enums/NetworkTextMode.hpp"
+#include "BasePacket.hpp"
+#include "../enums/NetworkTextMode.hpp"
 
 namespace tmockserver::packets {
     class FatalError : public BasePacket {

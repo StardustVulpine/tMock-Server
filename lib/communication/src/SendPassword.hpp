@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "../BasePacket.hpp"
+#include "BasePacket.hpp"
 
 namespace tmockserver::packets {
     class SendPassword : public BasePacket {

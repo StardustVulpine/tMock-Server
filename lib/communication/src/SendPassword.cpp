@@ -5,7 +5,7 @@
 #include "SendPassword.hpp"
 #include <iostream>
 
-#include "../../enums/PacketType.hpp"
+#include "../enums/PacketType.hpp"
 
 namespace tmockserver::packets {
     SendPassword::SendPassword

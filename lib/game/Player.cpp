@@ -8,6 +8,8 @@ namespace tmockserver {
     Player::Player(const std::byte playerID) :
         m_player_ID(playerID),
         m_skin_variant(),
+        m_voice_variant(),
+        m_voice_pitch_offset(0),
         m_hair(),
         m_hair_dye(),
         m_hide_visuals(),

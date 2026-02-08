@@ -3,9 +3,7 @@
 //
 
 #include "ConnectionApproved.hpp"
-
 #include <iostream>
-
 #include "Exception.hpp"
 
 namespace tmockserver::packets {
