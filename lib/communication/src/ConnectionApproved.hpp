@@ -3,9 +3,9 @@
 //
 
 #pragma once
-#include <cstddef>
 
-#include "../BasePacket.hpp"
+#include <cstddef>
+#include "BasePacket.hpp"
 
 namespace tmockserver::packets {
     class ConnectionApproved : public BasePacket {

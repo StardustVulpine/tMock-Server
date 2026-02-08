@@ -5,9 +5,8 @@
 #pragma once
 
 #include <expected>
-
-#include "../BasePacket.hpp"
-#include "../../enums/PacketType.hpp"
+#include "BasePacket.hpp"
+#include "../enums/PacketType.hpp"
 
 namespace tmockserver::packets {
     class ConnectRequest : public BasePacket {

@@ -1,40 +1,28 @@
 cmake_minimum_required(VERSION 4.1)
-project(tmock_server)
-
 set(CMAKE_CXX_STANDARD 26)
+project(tmock_server)
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     add_compile_options(-Wall -Wextra -Werror)
     add_compile_definitions(DEBUG)
 endif ()
 
-set(EXECUTABLES_LIST
-        main.cpp
-        extern_lib/json.hpp
-        Player.cpp
-        Player.hpp
-        Color.hpp
-        Configs.hpp
-)
-add_executable(${PROJECT_NAME} ${EXECUTABLES_LIST})
+# Libraries
+add_subdirectory(lib/networking)
+add_subdirectory(lib/communication)
+add_subdirectory(lib/game)
 
-set(LIB_LINK_TARGETS
-        tmock_networking
-        tmock_packets
-)
-target_link_libraries(${PROJECT_NAME} ${LIB_LINK_TARGETS})
-add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})
+# Executable
+add_subdirectory(src "${CMAKE_BINARY_DIR}/bin")
 
-add_subdirectory(networking)
-add_subdirectory(packets)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 set(DIRECTORIES
 
 )
-
 if (${DIRECOTIRES})
     target_include_directories(${PROJECT_NAME} PRIVATE ${DIRECTORIES})
 endif ()
 
-#file(COPY_FILE "${CMAKE_SOURCE_DIR}/server-config.json" "${CMAKE_BINARY_DIR}/server-config.json")
-configure_file("${CMAKE_SOURCE_DIR}/server-config.json" "${CMAKE_BINARY_DIR}/server-config.json")
+#file(COPY_FILE "${CMAKE_SOURCE_DIR}/server-cfg.json" "${CMAKE_BINARY_DIR}/server-cfg.json")
+configure_file("${CMAKE_SOURCE_DIR}/cfg/server-config.json" "${CMAKE_BINARY_DIR}/config/server-config.json")

@@ -5,7 +5,7 @@
 #include <vector>
 #include <Socket.hpp>
 #include <Packets.hpp>
-#include "extern_lib/json.hpp"
+#include "../ext/json.hpp"
 
 using json = nlohmann::json;
 
@@ -98,7 +98,9 @@ int main()
 }
 
 json load_server_config() {
-    std::ifstream fs("server-config.json");
+    std::ifstream fs("../cfg/server-cfg.json");
+    if (!fs.is_open()) {
+        std::println(std::cerr, "Config file not found!");
+    }
     return json::parse(fs);
-
 }

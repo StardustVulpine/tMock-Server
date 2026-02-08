@@ -5,9 +5,7 @@
 #pragma once
 
 #include <memory>
-
 #include "../enums/PacketType.hpp"
-
 #include <Socket.hpp>
 
 // Base for every network packet

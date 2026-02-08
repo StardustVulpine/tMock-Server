@@ -2,8 +2,8 @@
 // Created by stardustvulpine on 1/10/26.
 //
 
-#include "Socket.hpp"
-#include "Exception.hpp"
+#include "../include/Socket.hpp"
+#include "../include/Exception.hpp"
 
 #include <memory>
 #include <sys/socket.h>

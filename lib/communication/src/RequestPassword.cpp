@@ -3,10 +3,8 @@
 //
 
 #include "RequestPassword.hpp"
-
 #include <iostream>
-
-#include "../../enums/PacketType.hpp"
+#include "../enums/PacketType.hpp"
 #include <Exception.hpp>
 
 namespace tmockserver::packets {

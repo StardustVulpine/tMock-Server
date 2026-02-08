@@ -4871,7 +4871,7 @@ namespace std_fs = std::experimental::filesystem;
 }  // namespace detail
 NLOHMANN_JSON_NAMESPACE_END
 #elif JSON_HAS_FILESYSTEM
-#include <filesystem> // NOLINT(build/c++17)
+#include <filesystem> // NOLINT(.build/c++17)
 NLOHMANN_JSON_NAMESPACE_BEGIN
 namespace detail
 {
@@ -5512,7 +5512,7 @@ struct from_json_fn
 /// namespace to hold default `from_json` function
 /// to see why this is required:
 /// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4381.html
-namespace // NOLINT(cert-dcl59-cpp,fuchsia-header-anon-namespaces,google-build-namespaces)
+namespace // NOLINT(cert-dcl59-cpp,fuchsia-header-anon-namespaces,google-.build-namespaces)
 {
 #endif
 JSON_INLINE_VARIABLE constexpr const auto& from_json = // NOLINT(misc-definitions-in-headers)
@@ -6283,7 +6283,7 @@ struct to_json_fn
 /// namespace to hold default `to_json` function
 /// to see why this is required:
 /// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4381.html
-namespace // NOLINT(cert-dcl59-cpp,fuchsia-header-anon-namespaces,google-build-namespaces)
+namespace // NOLINT(cert-dcl59-cpp,fuchsia-header-anon-namespaces,google-.build-namespaces)
 {
 #endif
 JSON_INLINE_VARIABLE constexpr const auto& to_json = // NOLINT(misc-definitions-in-headers)
@@ -9622,7 +9622,7 @@ class json_sax_dom_callback_parser
 #endif
 
     /*!
-    @param[in] v  value to add to the JSON value we build during parsing
+    @param[in] v  value to add to the JSON value we .build during parsing
     @param[in] skip_callback  whether we should skip calling the callback
                function; this is required after start_array() and
                start_object() SAX events, because otherwise we would call the
@@ -13908,7 +13908,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     @brief const copy constructor
     @param[in] other const iterator to copy from
     @note This copy constructor had to be defined explicitly to circumvent a bug
-          occurring on msvc v19.0 compiler (VS 2015) debug build. For more
+          occurring on msvc v19.0 compiler (VS 2015) debug .build. For more
           information refer to: https://github.com/nlohmann/json/issues/1608
     */
     iter_impl(const iter_impl<const BasicJsonType>& other) noexcept
