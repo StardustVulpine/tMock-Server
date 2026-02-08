@@ -25,4 +25,4 @@ if (${DIRECOTIRES})
 endif ()
 
 #file(COPY_FILE "${CMAKE_SOURCE_DIR}/server-cfg.json" "${CMAKE_BINARY_DIR}/server-cfg.json")
-configure_file("${CMAKE_SOURCE_DIR}/cfg/server-config.json" "${CMAKE_BINARY_DIR}/config/server-config.json")
+configure_file("${CMAKE_SOURCE_DIR}/cfg/server_config.json" "${CMAKE_BINARY_DIR}/bin/server_config.json")

@@ -6,10 +6,11 @@
 #include <Socket.hpp>
 #include <Packets.hpp>
 #include "../ext/json.hpp"
+#include "Configs.hpp"
 
 using json = nlohmann::json;
 
-json load_server_config();
+tmockserver::ServerConfig load_server_config();
 
 [[noreturn]]
 int main()
@@ -18,17 +19,14 @@ int main()
     using namespace tmockserver::packets;
     using namespace tmockserver::networking;
 
-    json server_config = load_server_config();
-    auto server_version = server_config["server_version"].get<int>();
-    auto port = server_config["port"].get<int>();
-    auto max_clients = server_config["max_clients"].get<unsigned>();
-    auto password = server_config["password"].get<std::string>();
+    ServerConfig config = load_server_config();
+
 
     Socket server_socket(AddressFamily::IPv4, ConnectionType::TCP);
-    server_socket.Bind(port);
+    server_socket.Bind(config.port);
     server_socket.Listen();
     std::println(std::cout, "\033[38;2;0;255;1m {} \033[0m", "Server Started!");
-    std::println(std::cout, "\033[38;2;255;250;115m {} {}\033[0m", "Listening on port:", port);
+    std::println(std::cout, "\033[38;2;255;250;115m {} {}\033[0m", "Listening on port:", config.port);
 
     std::vector<std::thread> connected_clients;
 
@@ -37,12 +35,12 @@ int main()
         std::println(std::cout, "Awaiting client connection...");
 
         Socket client_socket = server_socket.Accept();
-        if (connected_clients.size() == max_clients)
+        if (connected_clients.size() == static_cast<unsigned long>(config.max_clients))
         {
 
         }
 
-        std::thread client_thread {[client = std::move(client_socket), password, server_version]()
+        std::thread client_thread {[client = std::move(client_socket), config]()
         {
             std::println(std::cout, "\033[38;2;0;255;0m {} {} \033[0m", "Client connected from", client.GetAddress());
             bool done = false;
@@ -60,12 +58,12 @@ int main()
                     {
                         ConnectRequest connect_request (msgSize, msgBuffer, client);
                         connect_request.Print();
-                        if (connect_request.GetClientVersion() != server_version) {
+                        if (connect_request.GetClientVersion() != config.server_version) {
                             FatalError(NetworkTextMode::LITERAL, "Server doesn't support this version of game.").Send(client);
                             done = true;
                             break;
                         }
-                        if (!password.empty()) {
+                        if (!config.password.empty()) {
                             RequestPassword().Send(client);
                             break;
                         }
@@ -76,7 +74,7 @@ int main()
                     {
                         SendPassword recPass (msgSize, msgBuffer, client);
                         recPass.Print();
-                        if (recPass.Content() != password) {
+                        if (recPass.Content() != config.password) {
                             FatalError(NetworkTextMode::LITERAL, "Tybijskie hasło").Send(client);
                             done = true;
                             break;
@@ -94,13 +92,21 @@ int main()
         connected_clients.emplace_back(std::move(client_thread));
         //std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
-
 }
 
-json load_server_config() {
-    std::ifstream fs("../cfg/server-cfg.json");
+tmockserver::ServerConfig load_server_config() {
+    std::ifstream fs("server_config.json");
     if (!fs.is_open()) {
         std::println(std::cerr, "Config file not found!");
+        return {};
     }
-    return json::parse(fs);
+    json config_json = json::parse(fs);
+
+    tmockserver::ServerConfig config;
+    config.server_version = config_json["server_version"].get<int>();
+    config.port = config_json["port"].get<int>();
+    config.max_clients = config_json["max_clients"].get<int>();
+    config.password = config_json["password"].get<std::string>();
+
+    return config;
 }
