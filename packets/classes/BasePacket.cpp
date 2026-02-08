@@ -3,11 +3,11 @@
 //
 
 #include "BasePacket.hpp"
-
 #include <iostream>
 #include <sstream>
-
 #include "../enums/NetworkTextMode.hpp"
+
+// Base for every network packet
 
 namespace tmockserver::packets {
 
@@ -16,9 +16,11 @@ namespace tmockserver::packets {
         m_type = enumTo<std::byte>(type);
     }
 
+    /* Logging method used for printing packet details in server console for debugging purposes
+     */
     void BasePacket::Print() const {
-        std::println(std::cout, "Message Size: {}", m_size);
-        std::println(std::cout, "Message Type: {}, {}", static_cast<int>(m_type), GetMessageTypeName());
+        std::println(std::cout, "Packet Size: {}", m_size);
+        std::println(std::cout, "Packet Type: {}, {}", static_cast<int>(m_type), GetMessageTypeName());
     }
 
     void BasePacket::Send(const networking::Socket &socket [[maybe_unused]]) const {
@@ -35,6 +37,10 @@ namespace tmockserver::packets {
         return buffer;
     }
 
+    /*
+        Method for getting name of the packet type based on it's bytes and defined enum values.
+        Returns <std::string>
+    */
     std::string BasePacket::GetMessageTypeName() const {
         std::string name;
 

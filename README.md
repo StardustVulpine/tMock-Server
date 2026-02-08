@@ -89,7 +89,7 @@ This is the first message sent by the client to the server when it connects. It 
 |:------:|:-----------:|:------------:|:-------------------------------------:|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |   3    |      4      |      1       | unsigned_byte/byte/unsigned_char/char | Network Text Mode    | This can be one of:<br> ```LITERAL = 0x00```,<br> `FORMATTABLE = 0x01`,<br> `LOCALIZATION_KEY = 0x02`,<br> `SUBSTITUTION = 0x03`                                                                                                                                                                                |
 |   4    |      5      |      1       | unsigned_byte/byte/unsigned_char/char | Text Message Size    | Size of Text Message Content's sent in this packet                                                                                                                                                                                                                                                              |
-|   5+   |     6+      |      1       |                string                 | Text Message Content | Error Message's Text Content. Can be any message when used with `LITERAL` Text Mode. Terraria uses `LOCALIZATION_KEY` for most messages since this support errors display in multiple languages that are accessed by KEYS specified inside [json file](dev_resources/Terraria.Localization.Content.en-US.json). |
+|   5+   |     6+      |      1       |                string                 | Text Message Content | Error Message's Text Content. Can be any message when used with `LITERAL` Text Mode. Terraria uses `LOCALIZATION_KEY` for most messages since this support errors display in multiple languages that are accessed by KEYS specified inside [json file](resources/Terraria.Localization.Content.en-US.json). |
 
 </details>
 
@@ -191,7 +191,7 @@ Color type is just a structure to store 3 bytes of RGB values.
 
 # Communication Schema
 ## Stage 1 - Initialize Connection
-![Diagram showing communication schema](/dev_resources/TNP_Communication_Map.drawio.svg)
+![Diagram showing communication schema](/resources/TNP_Communication_Map.drawio.svg)
 
 ## Stage 2 - Sync Player & World Information
 WIP

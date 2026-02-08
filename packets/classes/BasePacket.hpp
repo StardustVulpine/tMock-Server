@@ -10,11 +10,12 @@
 
 #include <Socket.hpp>
 
+// Base for every network packet
+
 namespace tmockserver::packets {
     class BasePacket {
     public:
         BasePacket(std::size_t size, PacketType type);
-
 
         virtual ~BasePacket() = default;
 
@@ -23,14 +24,19 @@ namespace tmockserver::packets {
 
         [[nodiscard]] std::unique_ptr<std::byte[]> CreateBuffer() const;
 
-        static constexpr std::size_t Size() {
+        /* Private and static getter for getting packet's base size.
+         * It'' always return 3 since base of the packet is always 2 bytes for size of entire packet + 1 byte for type = 3 bytes in size.
+         */
+        static constexpr std::size_t Size()
+        {
             return sizeof(m_size) + sizeof(m_type);
         }
-    private:
-        short int m_size{};
-        std::byte m_type{};
 
-        std::string GetMessageTypeName() const;
+    private:
+        short int m_size{}; // Field for storing size of entire packet using first two bytes
+        std::byte m_type{}; // Type of the network packet
+
+        [[nodiscard]] std::string GetMessageTypeName() const;
 
     };
 } // tmockserver::messages
