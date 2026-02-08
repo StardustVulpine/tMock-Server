@@ -111,8 +111,8 @@ This is the first message sent by the client to the server when it connects. It 
 |:-------------:|:---------------:|:------------:|:------------------------------------------:|--------------------|----------------------------------------------------------------------------------------|
 |       3       |        4        |      1       |   unsigned_byte/byte/unsigned_char/char    | Player ID          | Unique ID assigned by server to player when approving connection                       |
 |       4       |        5        |      1       |   unsigned_byte/byte/unsigned_char/char    | Skin Variant       |                                                                                        |
-|       5       |        6        |      1       |   unsigned byte/byte/unsigned char/char    | Voice Variant      | Supposed range from 0.00 to 1.00 (not confirmed)                                       |
-|      6-9      |      7-10       |      4       |                   float                    | Voice Pitch Offset |                                                                                        |
+|       5       |        6        |      1       |   unsigned byte/byte/unsigned char/char    | Voice Variant      | Added in 1.4.5                                                                         |
+|      6-9      |      7-10       |      4       |                   float                    | Voice Pitch Offset | Added in 1.4.5, Supposed range from 0.00 to 1.00 (not confirmed)                       |
 |      10       |       11        |      1       |   unsigned_byte/byte/unsigned_char/char    | Hair Type          | If >162 then Set To 0 (for 1.4.9.x, on 1.4.5 update there are new hair types added)    |
 | 11-(SizeOfIt) | 11-(Size of it) |     1-20     |                   string                   | Player Name        | Minimum 1 character and maximum 20 characters.                                         |
 |      +1       |       +1        |      1       |   unsigned_byte/byte/unsigned_char/char    | Hair Dye           |                                                                                        |
@@ -129,11 +129,11 @@ This is the first message sent by the client to the server when it connects. It 
 |      +1       |       +1        |      1       |   unsigned_byte/byte/unsigned_char/char    | Difficulty Flags   | BitFlags: 0 = Softcore, 1 = Mediumcore, 2 = Hardcore, 4 = ExtraAccessory, 8 = Creative |
 |      +1       |       +1        |      1       |   unsigned_byte/byte/unsigned_char/char    | Torch Flags        | BitFlags: 1 = UsingBiomeTorches, 2 = HappyFunTorchTime, 4 = unlockedBiomeTorches       |
 
+</details>
 
 > [!NOTE]
 > Player Info packet can have size ranging from 36 up to 55 bytes long depending on the size of Player Name string
 
-</details>
 
 ### Request Password (37)
 
