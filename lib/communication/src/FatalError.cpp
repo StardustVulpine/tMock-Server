@@ -17,12 +17,14 @@ namespace tmockserver::packets {
     }
 
     void FatalError::Print() const {
-
+        BasePacket::Print(1);
+        std::println(std::cout, "  [PAYLOAD] NetworkTextMode: LITERAL, TextSize: {}, TextContent: {}", static_cast<int>(m_textSize), m_textContent);
     }
 
     void FatalError::Send(const networking::Socket &socket) const {
         try {
             auto [buffer, size] = GetContent();
+            Print();
             socket.Write(buffer.get(), size);
         } catch (const Exception& e) {
             std::cerr << e.what() << std::endl;

@@ -13,7 +13,7 @@ namespace tmockserver::packets {
         explicit ConnectionApproved(int playerSlotID);
         ~ConnectionApproved() override = default;
 
-        void Print() const override;
+        void Print() const ;
         void Send(const networking::Socket &socket) const override;
 
     private:

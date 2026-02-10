@@ -13,7 +13,7 @@ namespace tmockserver::packets {
         FatalError(NetworkTextMode textMode, std::string_view text);
         ~FatalError() override = default;
 
-        void Print() const override;
+        void Print() const;
         void Send(const networking::Socket &socket) const override;
         [[nodiscard]] std::pair<std::unique_ptr<std::byte[]>, size_t> GetContent() const;
 

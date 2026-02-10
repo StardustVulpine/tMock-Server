@@ -15,5 +15,3 @@ set(LIB_LINK_TARGETS
 )
 target_link_libraries(${PROJECT_NAME} ${LIB_LINK_TARGETS})
 add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})
-
-target_include_directories(${PROJECT_NAME} PUBLIC . )

@@ -14,9 +14,8 @@ namespace tmockserver::packets {
     }
 
     void ConnectionApproved::Print() const {
-        std::println(std::cout, "\033[38;2;0;255;1m Client Connection Approved. \033[0m");
-        BasePacket::Print();
-        std::println(std::cout, "Player Slot: {}", std::to_integer<int>(m_playerSlotID));
+        BasePacket::Print(1);
+        std::println(std::cout, "  [PAYLOAD] Player Slot: {}", std::to_integer<int>(m_playerSlotID));
     }
 
     void ConnectionApproved::Send(const networking::Socket &socket) const {

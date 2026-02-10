@@ -11,8 +11,8 @@ namespace tmockserver::packets {
     RequestPassword::RequestPassword() : BasePacket(3, PacketType::REQUEST_PASSWORD){}
 
     void RequestPassword::Print() const {
-        std::println(std::cout, "\033[38;2;255;250;115m Server Requested Password From Client. \033[0m");
-        BasePacket::Print();
+        BasePacket::Print(1);
+        std::println(std::cout, "  [NO-PAYLOAD]");
     }
 
     void RequestPassword::Send(const networking::Socket &socket) const {
