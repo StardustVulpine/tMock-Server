@@ -4,6 +4,9 @@ set(CMAKE_CXX_STANDARD 26)
 set(EXECUTABLES_LIST
         Configs.hpp
         main.cpp
+        Server.cpp
+        Server.hpp
+        Colors.hpp
 )
 add_executable(${PROJECT_NAME} ${EXECUTABLES_LIST})
 
@@ -14,3 +17,5 @@ set(LIB_LINK_TARGETS
 )
 target_link_libraries(${PROJECT_NAME} ${LIB_LINK_TARGETS})
 add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/ext)

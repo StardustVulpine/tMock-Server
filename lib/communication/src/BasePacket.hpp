@@ -10,6 +10,10 @@
 
 // Base for every network packet
 
+#define RESET_COLOR "\033[0m"
+#define BLUE "\033[38;2;0;255;255m"
+#define PURPLE "\033[38;2;255;0;255m"
+
 namespace tmockserver::packets {
     class BasePacket {
     public:
@@ -17,7 +21,7 @@ namespace tmockserver::packets {
 
         virtual ~BasePacket() = default;
 
-        virtual void Print() const;
+        void Print(std::optional<int> type) const;
         virtual void Send(const networking::Socket &socket) const;
 
         [[nodiscard]] std::unique_ptr<std::byte[]> CreateBuffer() const;

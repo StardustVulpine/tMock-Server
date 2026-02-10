@@ -18,9 +18,13 @@ namespace tmockserver::packets {
 
     /* Logging method used for printing packet details in server console for debugging purposes
      */
-    void BasePacket::Print() const {
-        std::println(std::cout, "Packet Size: {}", m_size);
-        std::println(std::cout, "Packet Type: {}, {}", static_cast<int>(m_type), GetMessageTypeName());
+    void BasePacket::Print(const std::optional<int> type) const {
+        if (type == 0) { //received packet
+            std::println(std::cout, "{}> [PACKET RECEIVED]{} Size: {}, Type: ({}){}", BLUE, RESET_COLOR, m_size, static_cast<int>(m_type), GetMessageTypeName());
+        }
+        if (type == 1) { // send packet
+            std::println(std::cout, "{}> [PACKET SEND]{} Size: {}, Type: ({}){}", PURPLE, RESET_COLOR, m_size, static_cast<int>(m_type), GetMessageTypeName());
+        }
     }
 
     void BasePacket::Send(const networking::Socket &socket [[maybe_unused]]) const {

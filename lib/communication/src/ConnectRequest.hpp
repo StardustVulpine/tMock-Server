@@ -20,9 +20,9 @@ namespace tmockserver::packets {
 
         ~ConnectRequest() override = default;
 
-        void Print() const override;
+        void Print() const;
 
-        std::expected<int, VersionError> GetClientVersion() const;
+        [[nodiscard]] std::expected<int, VersionError> GetClientVersion() const;
 
 
 

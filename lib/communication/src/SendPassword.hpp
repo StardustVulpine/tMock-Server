@@ -12,7 +12,7 @@ namespace tmockserver::packets {
 
         ~SendPassword() override = default;
 
-        void Print() const override;
+        void Print() const;
 
         std::string Content() {
             return m_passwordContent;

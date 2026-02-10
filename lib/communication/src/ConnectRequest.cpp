@@ -34,11 +34,8 @@ namespace tmockserver::packets {
     }
 
     void ConnectRequest::Print() const {
-        std::println(std::cout, "\033[38;2;0;255;0m Client requested connection. \033[0m");
-        BasePacket::Print();
-
-        std::println(std::cout, "Text Size: {:d}", static_cast<char>(m_textSize));
-        std::println(std::cout, R"(Text Content: "{}")", m_textContent);
+        BasePacket::Print(0);
+        std::println(std::cout, R"(  [PAYLOAD] TextSize: {:d}; TextContent: "{}")", static_cast<char>(m_textSize), m_textContent);
     }
 
     std::expected<int, ConnectRequest::VersionError> ConnectRequest::GetClientVersion() const {
