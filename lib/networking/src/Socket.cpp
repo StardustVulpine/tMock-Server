@@ -123,15 +123,21 @@ namespace tmockserver::networking {
 
     /**
      *
-     * @return
+     * @return Socket IP Address with port when used with verbose flag as string.
      */
-    std::string Socket::GetAddress() const {
+    std::string Socket::GetAddress(const bool verbose) const {
         const uint32_t address = m_address.sin_addr.s_addr;
         std::string res = std::to_string((address) & 0xFF);
         res += "." + std::to_string((address >> 8) & 0xFF);
         res += "." + std::to_string((address >> 16) & 0xFF);
         res += "." + std::to_string((address >> 24) & 0xFF);
 
+        if (verbose) {
+            res += ":" + std::to_string(ntohs(m_address.sin_port));
+        }
+
         return res;
     }
+
+
 } // tmockserver

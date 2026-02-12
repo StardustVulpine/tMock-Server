@@ -6,14 +6,13 @@ set(EXECUTABLES_LIST
         main.cpp
         Server.cpp
         Server.hpp
-        Colors.hpp
 )
 add_executable(${PROJECT_NAME} ${EXECUTABLES_LIST})
 
 set(LIB_LINK_TARGETS
         tmock_networking
         tmock_communication
-        tmock_game
+        tmock_gamestate
 )
 target_link_libraries(${PROJECT_NAME} ${LIB_LINK_TARGETS})
 add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})

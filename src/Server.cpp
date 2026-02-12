@@ -10,7 +10,6 @@
 #include <thread>
 #include <json.hpp>
 #include <Packets.hpp>
-#include "Colors.hpp"
 
 using json = nlohmann::json;
 
@@ -21,90 +20,109 @@ namespace tmockserver {
     {
         m_socket.Bind(m_config.port);
         m_socket.Listen();
-
         std::println(std::cout, "{}Server started on port {}! {}", GREEN, m_config.port, RESET_COLOR);
-
         Run();
     }
 
-    [[noreturn]]
-    void Server::Run()
-    {
-        m_config.password = "dupa";
-
+    void Server::Run() {
         using namespace tmockserver::packets;
         using namespace tmockserver::networking;
+        using namespace tmockserver::gamestate;
 
-        std::vector<std::thread> connected_clients;
+        m_config.password = "123";
 
-        while (true)
-        {
+        // Initialize player list
+        for (int i=0; i < m_config.max_players; i++) {
+            m_player_list.emplace_back(static_cast<std::byte>(i));
+        }
+
+        std::println(std::cout, "{}Waiting for connections...{}", YELLOW, RESET_COLOR);
+
+        //region Main loop
+        while (true) {
+            // Accept connection and assign move it to thread for handling
             Socket client_socket = m_socket.Accept();
-            if (connected_clients.size() == static_cast<unsigned long>(m_config.max_clients))
+            std::thread {[this, client_socket = std::move(client_socket)]() mutable
             {
-
-            }
-
-            std::thread client_thread {[client = std::move(client_socket), this]()
-            {
-                std::string clientIP = client.GetAddress();
+                std::string clientIP = client_socket.GetAddress(true);
                 std::println(std::cout, "{}{} is connecting... {}", YELLOW, clientIP, RESET_COLOR);
-                bool done = false;
-                while (!done) {
+
+                //region Assign socket to player if there free slot.
+                Player *player = GetFreePlayer();
+                if (!player) {
+                    FatalError(NetworkTextMode::LITERAL, "Server is full.").Send(client_socket);
+                    return;
+                }
+                player->SetSocket(std::move(client_socket));
+                //endregion
+
+                // Client - Server communication loop
+                bool connected = true;
+                while (connected) {
 
                     // Buffer for catching message's head to determine it's size and type
                     auto msgBuffer = std::make_unique<std::byte[]>(BasePacket::Size());
-                    client.Read(msgBuffer.get(), BasePacket::Size());
+                    player->GetSocket().Read(msgBuffer.get(), BasePacket::Size());
                     const short int msgSize = *reinterpret_cast<short int *>(msgBuffer.get());
-                    std::byte msgType = *(msgBuffer.get() + sizeof(msgSize));
 
                     // Based on message type received from client, route to catch rest of the message content.
-                    switch (static_cast<PacketType>(msgType)) {
+                    switch (std::byte msgType = *(msgBuffer.get() + sizeof(msgSize)); static_cast<PacketType>(msgType)) {
                         case PacketType::CONNECT_REQUEST:
                         {
-                            ConnectRequest connect_request (msgSize, msgBuffer, client);
+                            ConnectRequest connect_request (msgSize, msgBuffer, player->GetSocket());
                             connect_request.Print();
 
                             if (connect_request.GetClientVersion() != m_serverVersion) {
-                                FatalError(NetworkTextMode::LITERAL, "Server doesn't support this version of game.").Send(client);
-                                done = true;
+                                FatalError(NetworkTextMode::LITERAL, "Server doesn't support this version of game.").Send(player->GetSocket());
+                                connected = false;
                                 break;
                             }
 
                             if (m_config.password) {
-                                RequestPassword().Send(client);
+                                RequestPassword().Send(player->GetSocket());
                                 break;
                             }
 
                             std::println(std::cout, "{}{} connection approved. {}", GREEN, clientIP, RESET_COLOR);
-                            ConnectionApproved(1).Send(client);
+                            ConnectionApproved(1).Send(player->GetSocket());
                             break;
                         }
                         case PacketType::RECEIVE_PASSWORD:
                         {
-                            SendPassword recPass (msgSize, msgBuffer, client);
+                            SendPassword recPass (msgSize, msgBuffer, player->GetSocket());
                             recPass.Print();
 
                             if (recPass.Content() != m_config.password) {
-                                FatalError(NetworkTextMode::LITERAL, "Wrong password.").Send(client);
-                                done = true;
+                                FatalError(NetworkTextMode::LITERAL, "Wrong password.").Send(player->GetSocket());
+                                connected = false;
                                 break;
                             }
 
-                            ConnectionApproved(1).Send(client);
+                            ConnectionApproved(1).Send(player->GetSocket());
                             break;
                         }
                         default:
-                            std::println(std::cout, "{}Unhandled message type received from {} {}", RED, client.GetAddress(), RESET_COLOR);
-                            FatalError(NetworkTextMode::LITERAL, "Unhandled message type received from client.").Send(client);
-                            done = true;
+                            std::println(std::cout, "{}{} has send unhandled message type: {}{}",
+                                RED, player->GetSocket().GetAddress(), static_cast<int>(msgType), RESET_COLOR
+                            );
+                            FatalError(NetworkTextMode::LITERAL, "Unhandled message type.").Send(player->GetSocket());
+                            connected = false;
                             break;
                     }
                 }
-                std::println(std::cout, "{}{} disconnected. {}", YELLOW, clientIP, RESET_COLOR);
-            }};
-            connected_clients.emplace_back(std::move(client_thread));
-            //std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                std::println(std::cout, "{}{} disconnected {}", YELLOW, clientIP, RESET_COLOR);
+            }}.detach();
+        } //endregion Main loop
+    } // Run
+
+    std::vector<Player> &Server::PlayerList() { return m_player_list;}
+    Player *Server::GetFreePlayer()
+    {
+        for (auto &player : m_player_list) {
+            if (!player.GetSocket().IsConnected()) {
+                return &player;
+            }
         }
+        return nullptr;
     }
 } // tmockserver
