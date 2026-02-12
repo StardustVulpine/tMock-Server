@@ -10,7 +10,7 @@ endif ()
 # Libraries
 add_subdirectory(lib/networking)
 add_subdirectory(lib/communication)
-add_subdirectory(lib/game)
+add_subdirectory(lib/gamestate)
 
 # Executable
 add_subdirectory(src "${CMAKE_BINARY_DIR}/bin")

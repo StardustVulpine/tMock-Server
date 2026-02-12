@@ -36,7 +36,8 @@ namespace tmockserver::networking {
         void Read(void *buffer, unsigned int size) const;
         void Write(const void *buffer, unsigned int size) const;
 
-        [[nodiscard]] std::string GetAddress() const;
+        [[nodiscard]] std::string GetAddress(bool verbose = false) const;
+        [[nodiscard]] bool IsConnected() const {return m_socket != INVALID_SOCKET;}
 
     private:
         Socket_T m_socket = INVALID_SOCKET; // Variable for storing socket created in constructor
