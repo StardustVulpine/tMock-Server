@@ -13,10 +13,13 @@ namespace tmockserver::packets {
         CONNECT_REQUEST = 0x01,          // Client -> Server
         FATAL_ERROR = 0x02,              // Server -> Client
         CONNECTION_APPROVED = 0x03,      // Server -> Client
+        PLAYER_INFO = 0x04,
 
         /* Some other messages here will be added later */
 
         REQUEST_PASSWORD = 0x25,        // Server -> Client
         RECEIVE_PASSWORD = 0x26,     // Client -> Server
+
+        CLIENT_UUID = 0x68
     };
 }

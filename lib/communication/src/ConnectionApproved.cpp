@@ -7,7 +7,7 @@
 #include "Exception.hpp"
 
 namespace tmockserver::packets {
-    ConnectionApproved::ConnectionApproved(const int playerSlotID)
+    ConnectionApproved::ConnectionApproved(const std::byte playerSlotID)
     : BasePacket(Size()+sizeof(m_playerSlotID), PacketType::CONNECTION_APPROVED),
     m_playerSlotID(static_cast<std::byte>(playerSlotID)) {
 
@@ -18,7 +18,7 @@ namespace tmockserver::packets {
         std::println(std::cout, "  [PAYLOAD] Player Slot: {}", std::to_integer<int>(m_playerSlotID));
     }
 
-    void ConnectionApproved::Send(const networking::Socket &socket) const {
+    void ConnectionApproved::Send(const net::Socket &socket) const {
         try {
             const auto buffer = CreateBuffer();
             std::byte* ptr = buffer.get();
@@ -27,7 +27,7 @@ namespace tmockserver::packets {
             (void)ptr; // :C
 
             Print();
-            socket.Write(buffer.get(), Size()+sizeof(m_playerSlotID));
+            socket.Write(buffer.get(), Size()+sizeof(std::byte));
         } catch (const Exception& e) {
             std::cerr << e.what() << std::endl;
         }

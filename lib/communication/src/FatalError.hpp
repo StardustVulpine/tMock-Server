@@ -5,7 +5,7 @@
 #pragma once
 
 #include "BasePacket.hpp"
-#include "../enums/NetworkTextMode.hpp"
+#include "../include/NetworkTextMode.hpp"
 
 namespace tmockserver::packets {
     class FatalError : public BasePacket {
@@ -14,7 +14,7 @@ namespace tmockserver::packets {
         ~FatalError() override = default;
 
         void Print() const;
-        void Send(const networking::Socket &socket) const override;
+        void Send(const net::Socket &socket) const override;
         [[nodiscard]] std::pair<std::unique_ptr<std::byte[]>, size_t> GetContent() const;
 
 

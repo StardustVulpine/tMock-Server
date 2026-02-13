@@ -6,6 +6,7 @@
 
 #include <Socket.hpp>
 #include <Player.hpp>
+#include <Packets.hpp>
 #include <vector>
 
 #define RESET_COLOR "\033[0m"
@@ -13,12 +14,9 @@
 #define YELLOW "\033[38;2;255;191;0m"
 #define RED "\033[38;2;220;20;60m"
 
-constexpr int SERVER_PROTOCOL_VERSION = 318;
+constexpr int SERVER_PROTOCOL_VERSION = 318 ;
 constexpr int DEFAULT_PORT = 7777;
 constexpr int DEFAULT_MAX_CLIENTS = 8;
-
-using namespace tmockserver::networking;
-using namespace tmockserver::gamestate;
 
 namespace tmockserver
 {
@@ -37,13 +35,15 @@ namespace tmockserver
 
         void Start();
 
-        std::vector<Player> &PlayerList();
-        Player *GetFreePlayer();
+        std::vector<gamestate::Player> &PlayerList();
+        gamestate::Player *GetFreePlayer();
+
+        static void Send(const net::Socket &socket, std::unique_ptr<packets::BasePacket> packet);
 
         private:
         int m_serverVersion = SERVER_PROTOCOL_VERSION;
-        Socket m_socket;
-        std::vector<Player> m_player_list;
+        net::Socket m_socket;
+        std::vector<gamestate::Player> m_player_list;
         Config m_config = Config();
 
         void Run();

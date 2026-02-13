@@ -8,7 +8,7 @@
 #include <utility>
 
 namespace tmockserver::packets {
-    ConnectRequest::ConnectRequest(const std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket)
+    ConnectRequest::ConnectRequest(const std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const net::Socket& client_socket)
     : BasePacket(msgSize, PacketType::CONNECT_REQUEST)
     {
         buffer = std::make_unique<std::byte[]>(msgSize);

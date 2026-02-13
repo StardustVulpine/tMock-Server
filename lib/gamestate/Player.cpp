@@ -10,7 +10,7 @@ namespace tmockserver::gamestate {
 
     }
 
-    networking::Socket& Player::GetSocket() {return m_socket;}
+    net::Socket& Player::GetSocket() {return m_socket;}
     
     std::byte Player::GetID() const {return m_player_ID;}
     std::byte Player::GetSkinVariant() const {return m_skin_variant;}
@@ -32,7 +32,7 @@ namespace tmockserver::gamestate {
     std::byte Player::GetDifficultyFlags() const {return m_difficulty_flags;}
     std::byte Player::GetTorchFlags() const {return m_torch_flags;}
 
-    void Player::SetSocket(networking::Socket socket) {
+    void Player::SetSocket(net::Socket socket) {
         m_socket = std::move(socket);
     }
 

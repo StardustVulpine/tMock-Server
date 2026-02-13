@@ -11,6 +11,6 @@ namespace tmockserver::packets {
     public:
         RequestPassword();
         void Print() const;
-        void Send(const networking::Socket &socket) const override;
+        void Send(const net::Socket &socket) const override;
     };
 }

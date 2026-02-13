@@ -13,7 +13,7 @@ namespace tmockserver::gamestate {
         public:
         explicit Player(std::byte playerID);
 
-        [[nodiscard]] networking::Socket& GetSocket();
+        [[nodiscard]] net::Socket& GetSocket();
 
         [[nodiscard]] std::byte GetID() const;
         [[nodiscard]] std::byte GetSkinVariant() const;
@@ -35,7 +35,7 @@ namespace tmockserver::gamestate {
         [[nodiscard]] std::byte GetDifficultyFlags() const;
         [[nodiscard]] std::byte GetTorchFlags() const;
 
-        void SetSocket(networking::Socket socket);
+        void SetSocket(net::Socket socket);
         
         void SetID(std::byte id);
         void SetSkinVariant(std::byte variant);
@@ -58,7 +58,7 @@ namespace tmockserver::gamestate {
         void SetTorchFlags(std::byte flags);
 
         private:
-        networking::Socket m_socket{};
+        net::Socket m_socket{};
 
         std::byte m_player_ID;
         std::byte m_skin_variant{};

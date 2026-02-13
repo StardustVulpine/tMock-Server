@@ -16,7 +16,7 @@ using Socket_T = int;
 
 constexpr Socket_T INVALID_SOCKET = -1;
 
-namespace tmockserver::networking {
+namespace tmockserver::net {
     class Socket {
     public:
         Socket() = default;
@@ -33,10 +33,12 @@ namespace tmockserver::networking {
         bool Bind(unsigned short int port, const std::optional<std::string> &ip_address=std::nullopt);
         void Listen() const;
         [[nodiscard]] Socket Accept() const;
+
         void Read(void *buffer, unsigned int size) const;
         void Write(const void *buffer, unsigned int size) const;
+        void Send(std::byte buffer) const;
 
-        [[nodiscard]] std::string GetAddress(bool verbose = false) const;
+        [[nodiscard]] std::string GetAddressAsString(bool verbose = false) const;
         [[nodiscard]] bool IsConnected() const {return m_socket != INVALID_SOCKET;}
 
     private:
@@ -50,10 +52,10 @@ namespace tmockserver::networking {
 } // tmockserver
 
 template <>
-struct std::formatter<tmockserver::networking::Socket> : std::formatter<std::string> {
-    auto format(const tmockserver::networking::Socket &socket, format_context& ctx) const {
+struct std::formatter<tmockserver::net::Socket> : std::formatter<std::string> {
+    auto format(const tmockserver::net::Socket &socket, format_context& ctx) const {
         return formatter<string>::format(
-          std::format("[Socket Details]\n IP Address: {}", socket.GetAddress()), ctx);
+          std::format("[Socket Details]\n IP Address: {}", socket.GetAddressAsString()), ctx);
     }
 };
 
