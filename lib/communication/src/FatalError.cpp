@@ -21,7 +21,7 @@ namespace tmockserver::packets {
         std::println(std::cout, "  [PAYLOAD] NetworkTextMode: LITERAL, TextSize: {}, TextContent: {}", static_cast<int>(m_textSize), m_textContent);
     }
 
-    void FatalError::Send(const networking::Socket &socket) const {
+    void FatalError::Send(const net::Socket &socket) const {
         try {
             auto [buffer, size] = GetContent();
             Print();

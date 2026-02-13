@@ -5,14 +5,14 @@
 #include "SendPassword.hpp"
 #include <iostream>
 
-#include "../enums/PacketType.hpp"
+#include "../include/PacketType.hpp"
 
 namespace tmockserver::packets {
     SendPassword::SendPassword
     (
         const std::size_t msgSize,
         std::unique_ptr<std::byte[]> &buffer,
-        const networking::Socket &client_socket
+        const net::Socket &client_socket
     )
     : BasePacket(msgSize, PacketType::RECEIVE_PASSWORD)
     {

@@ -4,7 +4,7 @@
 
 #include "RequestPassword.hpp"
 #include <iostream>
-#include "../enums/PacketType.hpp"
+#include "../include/PacketType.hpp"
 #include <Exception.hpp>
 
 namespace tmockserver::packets {
@@ -15,7 +15,7 @@ namespace tmockserver::packets {
         std::println(std::cout, "  [NO-PAYLOAD]");
     }
 
-    void RequestPassword::Send(const networking::Socket &socket) const {
+    void RequestPassword::Send(const net::Socket &socket) const {
         try {
             const auto buffer = CreateBuffer();
             Print();

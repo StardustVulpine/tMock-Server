@@ -8,7 +8,7 @@
 namespace tmockserver::packets {
     class SendPassword : public BasePacket {
     public:
-        SendPassword(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket);
+        SendPassword(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const net::Socket& client_socket);
 
         ~SendPassword() override = default;
 

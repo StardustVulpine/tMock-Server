@@ -6,7 +6,7 @@
 
 #include <expected>
 #include "BasePacket.hpp"
-#include "../enums/PacketType.hpp"
+#include "../include/PacketType.hpp"
 
 namespace tmockserver::packets {
     class ConnectRequest : public BasePacket {
@@ -15,12 +15,12 @@ namespace tmockserver::packets {
             BadVersion = 0
         };
 
-        ConnectRequest(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const networking::Socket& client_socket);
+        ConnectRequest(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const net::Socket& client_socket);
         ConnectRequest(std::size_t msgSize, std::size_t txtSize, std::string  text);
 
         ~ConnectRequest() override = default;
 
-        void Print() const;
+        void Print() const;;
 
         [[nodiscard]] std::expected<int, VersionError> GetClientVersion() const;
 

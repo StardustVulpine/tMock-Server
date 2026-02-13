@@ -11,7 +11,7 @@
 #include <cstring>
 #include <iostream>
 
-namespace tmockserver::networking {
+namespace tmockserver::net {
     /* Constructor for server socket
      * Takes:
      * address_family - from enum (AddressFamily::IPv4 or AddressFamily::IPv6)
@@ -29,8 +29,8 @@ namespace tmockserver::networking {
         m_socket = socket(m_address_family, connType, 0);
     }
 
-    /* Constructor for client socket
-     *
+    /**
+     * Constructor for client socket
      */
     Socket::Socket(const Socket_T socket, const sockaddr_in address) : m_socket(socket), m_address(address) {
         if (m_socket == INVALID_SOCKET) throw Exception(strerror(errno));
@@ -57,13 +57,11 @@ namespace tmockserver::networking {
         return *this;
     }
 
-    /* Method for binding server's socket to specified port with optional filter for specific IP address
-     * Takes:
-     * port: int - value of the port (ex. value: 7777)
-     * (optional) ip_address: string - IP Address on which socket should be bound (ex. value: "192.168.1.10")
-     *
-     *  Assigns bind parameters and gives socket local address.
-     *
+    /**
+     * Assigns bind parameters and gives socket local address.
+     * @param port Network port as integer
+     * @param ip_address Network IP Address as string (Optional)
+     * @return
      */
     bool Socket::Bind(const unsigned short int port, const std::optional<std::string> &ip_address) {
 
@@ -115,17 +113,16 @@ namespace tmockserver::networking {
 
     }
 
-    void Socket::Write(const void *buffer, unsigned int size) const {
+    void Socket::Write(const void *buffer, const unsigned int size) const {
         if (write(m_socket, buffer, size) == -1) {
             throw Exception(strerror(errno));
         }
     }
 
     /**
-     *
-     * @return Socket IP Address with port when used with verbose flag as string.
+     * @return Socket IP Address as string. Add port with verbose flag set to true.
      */
-    std::string Socket::GetAddress(const bool verbose) const {
+    std::string Socket::GetAddressAsString(const bool verbose) const {
         const uint32_t address = m_address.sin_addr.s_addr;
         std::string res = std::to_string((address) & 0xFF);
         res += "." + std::to_string((address >> 8) & 0xFF);

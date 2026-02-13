@@ -14,5 +14,5 @@ set(LIB_SOURCES
 )
 
 add_library(${PROJECT_NAME} SHARED ${LIB_SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC include src)
+target_include_directories(${PROJECT_NAME} PUBLIC include)
 

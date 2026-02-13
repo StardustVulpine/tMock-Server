@@ -4,13 +4,18 @@
 
 #include "BasePacket.hpp"
 #include <iostream>
-#include <sstream>
-#include "../enums/NetworkTextMode.hpp"
+
+#include "Exception.hpp"
+#include "../include/NetworkTextMode.hpp"
 
 // Base for every network packet
-
 namespace tmockserver::packets {
 
+    /**
+     * Create base network packet by defining its size and type. Can be extended when inherited by other classes.
+     * @param size Size of the packet
+     * @param type Type of network packet
+     */
     BasePacket::BasePacket(const std::size_t size, const PacketType type) {
         m_size = static_cast<short int>(size);
         m_type = enumTo<std::byte>(type);
@@ -20,17 +25,27 @@ namespace tmockserver::packets {
      */
     void BasePacket::Print(const std::optional<int> type) const {
         if (type == 0) { //received packet
-            std::println(std::cout, "{}> [PACKET RECEIVED]{} Size: {}, Type: ({}){}", BLUE, RESET_COLOR, m_size, static_cast<int>(m_type), GetMessageTypeName());
+            std::println(std::cout, "{}> [PACKET RECEIVED]{} Size: {}, Type: ({}){}", BLUE, RESET_COLOR, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
         }
         if (type == 1) { // send packet
-            std::println(std::cout, "{}> [PACKET SEND]{} Size: {}, Type: ({}){}", PURPLE, RESET_COLOR, m_size, static_cast<int>(m_type), GetMessageTypeName());
+            std::println(std::cout, "{}> [PACKET SEND]{} Size: {}, Type: ({}){}", PURPLE, RESET_COLOR, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
         }
     }
 
-    void BasePacket::Send(const networking::Socket &socket [[maybe_unused]]) const {
-
+    void BasePacket::Send(const net::Socket &socket [[maybe_unused]]) const {
+        /*try {
+            auto [buffer, size] = GetContent();
+            Print();
+            socket.Write(buffer.get(), size);
+        } catch (const Exception& e) {
+            std::cerr << e.what() << std::endl;
+        }*/
     }
 
+    /**
+     * Creates byte buffer with three first bytes already filled with packet size data and it's type.
+     * @return Byte buffer for further sending.
+     */
     std::unique_ptr<std::byte[]> BasePacket::CreateBuffer() const {
         auto buffer = std::make_unique<std::byte[]>(m_size);
         std::byte* ptr = buffer.get();
@@ -41,11 +56,20 @@ namespace tmockserver::packets {
         return buffer;
     }
 
-    /*
-        Method for getting name of the packet type based on it's bytes and defined enum values.
-        Returns <std::string>
-    */
-    std::string BasePacket::GetMessageTypeName() const {
+    /**
+     *
+     * @return Size of packet read from two first bytes of packet data
+     */
+    short int BasePacket::GetPacketSize() const {
+        return m_size;
+    }
+
+
+    /**
+     * 
+     * @return Packet type name as string
+     */
+    std::string BasePacket::GetPacketTypeNameAsString() const {
         std::string name;
 
         switch(static_cast<PacketType>(m_type)) {

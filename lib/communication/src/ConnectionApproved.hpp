@@ -10,11 +10,11 @@
 namespace tmockserver::packets {
     class ConnectionApproved : public BasePacket {
     public:
-        explicit ConnectionApproved(int playerSlotID);
+        explicit ConnectionApproved(std::byte playerSlotID);
         ~ConnectionApproved() override = default;
 
         void Print() const ;
-        void Send(const networking::Socket &socket) const override;
+        void Send(const net::Socket &socket) const override;
 
     private:
         std::byte m_playerSlotID{};
