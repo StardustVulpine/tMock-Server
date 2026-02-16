@@ -10,7 +10,8 @@ namespace tmockserver::packets {
     class RequestPassword : public BasePacket {
     public:
         RequestPassword();
-        void Print() const;
-        void Send(const net::Socket &socket) const override;
+        void Print() const override;
+        [[nodiscard]] std::unique_ptr<std::byte[]> GetPacketContent(std::unique_ptr<std::byte[]> buffer) const override;
+
     };
 }

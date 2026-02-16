@@ -16,19 +16,23 @@ namespace tmockserver::packets {
         };
 
         ConnectRequest(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const net::Socket& client_socket);
-        ConnectRequest(std::size_t msgSize, std::size_t txtSize, std::string  text);
 
         ~ConnectRequest() override = default;
 
-        void Print() const;;
+        void Print() const override;
 
         [[nodiscard]] std::expected<int, VersionError> GetClientVersion() const;
-
-
 
     private:
         std::byte m_textSize{};
         std::string m_textContent{};
+
+        [[nodiscard]] std::unique_ptr<std::byte[]> GetPacketContent(const std::unique_ptr<std::byte[]> buffer) const override
+        {
+            std::byte* ptr = buffer.get();
+            (void) ptr; // :C
+            return nullptr;
+        }
 
     };
 } // tmockserver::messages

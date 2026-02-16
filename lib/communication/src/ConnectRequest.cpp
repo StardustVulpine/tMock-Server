@@ -22,19 +22,12 @@ namespace tmockserver::packets {
         ptr++;
         const std::string_view txtContent (reinterpret_cast<char *>(ptr), std::to_integer<size_t>(m_textSize));
         m_textContent = txtContent;
-    }
 
-    ConnectRequest::ConnectRequest
-    (
-        const std::size_t msgSize,
-        const std::size_t txtSize,
-        std::string text
-    ) : BasePacket(msgSize, PacketType::CONNECT_REQUEST), m_textSize(static_cast<std::byte>(txtSize)), m_textContent(std::move(text))
-    {
+        ConnectRequest::Print();
     }
 
     void ConnectRequest::Print() const {
-        BasePacket::Print(0);
+        PrintPacketHead(0);
         std::println(std::cout, R"(  [PAYLOAD] TextSize: {:d}; TextContent: "{}")", static_cast<char>(m_textSize), m_textContent);
     }
 

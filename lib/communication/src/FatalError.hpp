@@ -13,9 +13,9 @@ namespace tmockserver::packets {
         FatalError(NetworkTextMode textMode, std::string_view text);
         ~FatalError() override = default;
 
-        void Print() const;
-        void Send(const net::Socket &socket) const override;
-        [[nodiscard]] std::pair<std::unique_ptr<std::byte[]>, size_t> GetContent() const;
+        void Print() const override;
+        //[[nodiscard]] std::unique_ptr<std::byte[]> Serialize() const override;
+        [[nodiscard]] std::unique_ptr<std::byte[]> GetPacketContent(std::unique_ptr<std::byte[]> buffer) const override;
 
 
     private:

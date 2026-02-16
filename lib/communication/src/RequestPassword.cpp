@@ -11,18 +11,13 @@ namespace tmockserver::packets {
     RequestPassword::RequestPassword() : BasePacket(3, PacketType::REQUEST_PASSWORD){}
 
     void RequestPassword::Print() const {
-        BasePacket::Print(1);
+        BasePacket::PrintPacketHead(1);
         std::println(std::cout, "  [NO-PAYLOAD]");
     }
 
-    void RequestPassword::Send(const net::Socket &socket) const {
-        try {
-            const auto buffer = CreateBuffer();
-            Print();
-            socket.Write(buffer.get(), Size());
-        } catch (const Exception& e) {
-            std::cerr << e.what() << std::endl;
-        }
+    std::unique_ptr<std::byte[]> RequestPassword::GetPacketContent(std::unique_ptr<std::byte[]> buffer) const
+    {
+        return buffer;
     }
 }
 

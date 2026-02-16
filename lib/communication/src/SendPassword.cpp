@@ -27,10 +27,12 @@ namespace tmockserver::packets {
         ptr++;
         const std::string_view txtContent (reinterpret_cast<char *>(ptr), std::to_integer<size_t>(m_passwordSize));
         m_passwordContent = txtContent;
+
+        SendPassword::Print();
     }
 
     void SendPassword::Print() const {
-        BasePacket::Print(0);
+        PrintPacketHead(0);
         std::println(std::cout, R"(  [PAYLOAD] TextSize: {:d}; TextContent: "{}")", static_cast<char>(m_passwordSize), m_passwordContent);
     }
 }

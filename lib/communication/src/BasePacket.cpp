@@ -21,9 +21,11 @@ namespace tmockserver::packets {
         m_type = enumTo<std::byte>(type);
     }
 
-    /* Logging method used for printing packet details in server console for debugging purposes
+    /**
+     * Print packet details to console.
+     * @param type 0 if packet is received, 1 if packet is sent
      */
-    void BasePacket::Print(const std::optional<int> type) const {
+    void BasePacket::PrintPacketHead(const std::optional<int> type) const {
         if (type == 0) { //received packet
             std::println(std::cout, "{}> [PACKET RECEIVED]{} Size: {}, Type: ({}){}", BLUE, RESET_COLOR, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
         }
@@ -33,13 +35,13 @@ namespace tmockserver::packets {
     }
 
     void BasePacket::Send(const net::Socket &socket [[maybe_unused]]) const {
-        /*try {
-            auto [buffer, size] = GetContent();
+        try {
+            const auto buffer = GetPacketContent(CreateBuffer());
             Print();
-            socket.Write(buffer.get(), size);
+            socket.Write(buffer.get(), m_size);
         } catch (const Exception& e) {
             std::cerr << e.what() << std::endl;
-        }*/
+        }
     }
 
     /**
@@ -57,7 +59,6 @@ namespace tmockserver::packets {
     }
 
     /**
-     *
      * @return Size of packet read from two first bytes of packet data
      */
     short int BasePacket::GetPacketSize() const {
@@ -66,7 +67,6 @@ namespace tmockserver::packets {
 
 
     /**
-     * 
      * @return Packet type name as string
      */
     std::string BasePacket::GetPacketTypeNameAsString() const {

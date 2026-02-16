@@ -12,7 +12,7 @@ namespace tmockserver::packets {
 
         ~SendPassword() override = default;
 
-        void Print() const;
+        void Print() const override;
 
         std::string Content() {
             return m_passwordContent;
@@ -21,6 +21,13 @@ namespace tmockserver::packets {
     private:
         std::byte m_passwordSize{};
         std::string m_passwordContent{};
+
+        [[nodiscard]] std::unique_ptr<std::byte[]> GetPacketContent(const std::unique_ptr<std::byte[]> buffer) const override
+        {
+            std::byte* ptr = buffer.get();
+            (void)ptr; // :C
+            return nullptr;
+        }
 
     };
 } // tmockserver
