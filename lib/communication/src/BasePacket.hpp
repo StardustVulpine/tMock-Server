@@ -21,8 +21,13 @@ namespace tmockserver::packets {
 
         virtual ~BasePacket() = default;
 
-        void Print(std::optional<int> type) const;
-        virtual void Send(const net::Socket &socket) const;
+        void PrintPacketHead(std::optional<int> type) const;
+        virtual void Print() const = 0;
+
+        void Send(const net::Socket &socket) const;
+
+        //[[nodiscard]] virtual std::unique_ptr<std::byte[]> Serialize() const = 0;
+        [[nodiscard]] virtual std::unique_ptr<std::byte[]> GetPacketContent(std::unique_ptr<std::byte[]> buffer) const = 0;
 
         [[nodiscard]] std::unique_ptr<std::byte[]> CreateBuffer() const;
 
@@ -33,7 +38,7 @@ namespace tmockserver::packets {
          * @return Byte size of the base packet
          */
         static constexpr std::size_t Size() {
-            return sizeof(m_size) + sizeof(m_type);
+            return sizeof(decltype(m_size)) + sizeof(decltype(m_type));
         }
 
     private:

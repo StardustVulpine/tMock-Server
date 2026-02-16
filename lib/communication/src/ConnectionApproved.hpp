@@ -13,8 +13,8 @@ namespace tmockserver::packets {
         explicit ConnectionApproved(std::byte playerSlotID);
         ~ConnectionApproved() override = default;
 
-        void Print() const ;
-        void Send(const net::Socket &socket) const override;
+        void Print() const override;
+        [[nodiscard]] std::unique_ptr<std::byte[]> GetPacketContent(std::unique_ptr<std::byte[]> buffer) const override;
 
     private:
         std::byte m_playerSlotID{};

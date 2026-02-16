@@ -17,33 +17,19 @@ namespace tmockserver::packets {
     }
 
     void FatalError::Print() const {
-        BasePacket::Print(1);
+        PrintPacketHead(1);
         std::println(std::cout, "  [PAYLOAD] NetworkTextMode: LITERAL, TextSize: {}, TextContent: {}", static_cast<int>(m_textSize), m_textContent);
     }
 
-    void FatalError::Send(const net::Socket &socket) const {
-        try {
-            auto [buffer, size] = GetContent();
-            Print();
-            socket.Write(buffer.get(), size);
-        } catch (const Exception& e) {
-            std::cerr << e.what() << std::endl;
-        }
-    }
-
-    std::pair<std::unique_ptr<std::byte[]>, size_t> FatalError::GetContent() const {
-        auto buffer = CreateBuffer();
+    std::unique_ptr<std::byte[]> FatalError::GetPacketContent(std::unique_ptr<std::byte[]> buffer) const
+    {
         std::byte* ptr = buffer.get();
         ptr += Size();
 
         *ptr++ = m_networkTextMode;
         *ptr++ = m_textSize;
         std::copy_n(reinterpret_cast<const std::byte *>(m_textContent.data()), std::to_integer<size_t>(m_textSize), ptr);
-        ptr = buffer.get();
-        size_t s = *reinterpret_cast<short int*>(ptr);
 
-        return std::make_pair(std::move(buffer), s);
+        return buffer;
     }
-
-
 } // tmockserver

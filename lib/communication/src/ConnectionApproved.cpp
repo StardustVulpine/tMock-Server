@@ -14,22 +14,18 @@ namespace tmockserver::packets {
     }
 
     void ConnectionApproved::Print() const {
-        BasePacket::Print(1);
+        BasePacket::PrintPacketHead(1);
         std::println(std::cout, "  [PAYLOAD] Player Slot: {}", std::to_integer<int>(m_playerSlotID));
     }
 
-    void ConnectionApproved::Send(const net::Socket &socket) const {
-        try {
-            const auto buffer = CreateBuffer();
-            std::byte* ptr = buffer.get();
-            ptr += Size();
-            *ptr++ = m_playerSlotID;
-            (void)ptr; // :C
+    std::unique_ptr<std::byte[]> ConnectionApproved::GetPacketContent(std::unique_ptr<std::byte[]> buffer) const
+    {
+        std::byte* ptr = buffer.get();
+        ptr += Size();
+        *ptr++ = m_playerSlotID;
+        (void)ptr; // :C
 
-            Print();
-            socket.Write(buffer.get(), Size()+sizeof(std::byte));
-        } catch (const Exception& e) {
-            std::cerr << e.what() << std::endl;
-        }
+        return buffer;
     }
+
 }

@@ -9,6 +9,7 @@
 #include <ostream>
 #include <thread>
 #include <json.hpp>
+#include <mutex>
 #include <Packets.hpp>
 
 using json = nlohmann::json;
@@ -25,7 +26,7 @@ namespace
 namespace tmockserver {
     Server::Server() : m_socket(net::Socket(net::AddressFamily::IPv4, net::ConnectionType::TCP))
     {
-        //m_config.password = "123";
+        m_config.password = "123";
     }
 
     void Server::Start()
@@ -79,14 +80,10 @@ namespace tmockserver {
                     // Based on message type received from client, route to catch rest of the message content.
                     std::byte msgType = *(msgBuffer.get() + sizeof(decltype(msgSize)));
 
-
                     switch ( static_cast<PacketType>(msgType)) {
                         case PacketType::CONNECT_REQUEST:
                         {
-                            ConnectRequest connect_request (msgSize, msgBuffer, player->GetSocket());
-                            connect_request.Print();
-
-                            if (connect_request.GetClientVersion() != m_serverVersion) {
+                            if (ConnectRequest connect_request (msgSize, msgBuffer, player->GetSocket()); connect_request.GetClientVersion() != m_serverVersion) {
                                 FatalError(NetworkTextMode::LITERAL, "Server doesn't support this version of game.").Send(player->GetSocket());
                                 connected = false;
                                 break;
@@ -103,15 +100,11 @@ namespace tmockserver {
                         }
                         case PacketType::RECEIVE_PASSWORD:
                         {
-                            SendPassword recPass (msgSize, msgBuffer, player->GetSocket());
-                            recPass.Print();
-
-                            if (recPass.Content() != m_config.password) {
+                            if (SendPassword recPass (msgSize, msgBuffer, player->GetSocket()); recPass.Content() != m_config.password) {
                                 FatalError(NetworkTextMode::LITERAL, "Wrong password.").Send(player->GetSocket());
                                 connected = false;
                                 break;
                             }
-
                             ConnectionApproved(player->GetID()).Send(player->GetSocket());
                             break;
                         }
@@ -134,8 +127,10 @@ namespace tmockserver {
     } // Run
 
     std::vector<gamestate::Player> &Server::PlayerList() { return m_player_list;}
+
     gamestate::Player *Server::GetFreePlayer()
     {
+        std::scoped_lock lock(m_GetFreePlayerMutex);
         for (auto &player : m_player_list) {
             if (!player.GetSocket().IsConnected()) {
                 return &player;
