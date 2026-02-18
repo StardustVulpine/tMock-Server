@@ -40,7 +40,7 @@ namespace tmockserver {
     void Server::Run() {
         using namespace tmockserver::packets;
         using namespace tmockserver::net;
-        using namespace tmockserver::gamestate;
+        using namespace tmockserver::terraria;
 
         // Initialize player list
         for (int i=0; i < m_config.max_players; i++) {
@@ -126,9 +126,9 @@ namespace tmockserver {
         } //endregion Main loop
     } // Run
 
-    std::vector<gamestate::Player> &Server::PlayerList() { return m_player_list;}
+    std::vector<terraria::Player> &Server::PlayerList() { return m_player_list;}
 
-    gamestate::Player *Server::GetFreePlayer()
+    terraria::Player *Server::GetFreePlayer()
     {
         std::scoped_lock lock(m_GetFreePlayerMutex);
         for (auto &player : m_player_list) {

@@ -31,6 +31,5 @@ add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})
 set(INCLUDE_DIR
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${CMAKE_CURRENT_SOURCE_DIR}/enums
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR})

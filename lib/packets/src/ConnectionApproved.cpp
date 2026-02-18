@@ -4,7 +4,6 @@
 
 #include "ConnectionApproved.hpp"
 #include <iostream>
-#include "Exception.hpp"
 
 namespace tmockserver::packets {
     ConnectionApproved::ConnectionApproved(const std::byte playerSlotID)
@@ -14,7 +13,7 @@ namespace tmockserver::packets {
     }
 
     void ConnectionApproved::Print() const {
-        BasePacket::PrintPacketHead(1);
+        BasePacket::PrintPacketHead(PacketDirection::SEND);
         std::println(std::cout, "  [PAYLOAD] Player Slot: {}", std::to_integer<int>(m_playerSlotID));
     }
 

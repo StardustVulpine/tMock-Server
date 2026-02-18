@@ -8,7 +8,7 @@
 #include "Color.hpp"
 #include <Socket.hpp>
 
-namespace tmockserver::gamestate {
+namespace tmockserver::terraria {
     class Player {
         public:
         explicit Player(std::byte playerID);

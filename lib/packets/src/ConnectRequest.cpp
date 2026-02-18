@@ -5,7 +5,6 @@
 #include "ConnectRequest.hpp"
 
 #include <iostream>
-#include <utility>
 
 namespace tmockserver::packets {
     ConnectRequest::ConnectRequest(const std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const net::Socket& client_socket)
@@ -27,7 +26,7 @@ namespace tmockserver::packets {
     }
 
     void ConnectRequest::Print() const {
-        PrintPacketHead(0);
+        PrintPacketHead(PacketDirection::RECEIVE);
         std::println(std::cout, R"(  [PAYLOAD] TextSize: {:d}; TextContent: "{}")", static_cast<char>(m_textSize), m_textContent);
     }
 

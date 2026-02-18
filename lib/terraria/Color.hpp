@@ -5,7 +5,7 @@
 #pragma once
 #include <cstddef>
 
-namespace tmockserver {
+namespace tmockserver::terraria {
     struct Color {
         std::byte red;
         std::byte green;

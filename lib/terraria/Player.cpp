@@ -4,7 +4,7 @@
 
 #include "Player.hpp"
 
-namespace tmockserver::gamestate {
+namespace tmockserver::terraria {
     Player::Player(const std::byte playerID) : m_player_ID(playerID)
     {
 

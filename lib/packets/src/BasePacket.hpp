@@ -15,22 +15,26 @@
 #define PURPLE "\033[38;2;255;0;255m"
 
 namespace tmockserver::packets {
+    enum class PacketDirection
+    {
+        RECEIVE = 1,
+        SEND
+    };
+
+
     class BasePacket {
     public:
         BasePacket(std::size_t size, PacketType type);
-
         virtual ~BasePacket() = default;
 
-        void PrintPacketHead(std::optional<int> type) const;
+        void PrintPacketHead(std::optional<PacketDirection> direction) const;
         virtual void Print() const = 0;
 
         void Send(const net::Socket &socket) const;
 
         //[[nodiscard]] virtual std::unique_ptr<std::byte[]> Serialize() const = 0;
         [[nodiscard]] virtual std::unique_ptr<std::byte[]> GetPacketContent(std::unique_ptr<std::byte[]> buffer) const = 0;
-
         [[nodiscard]] std::unique_ptr<std::byte[]> CreateBuffer() const;
-
         [[nodiscard]] short int GetPacketSize() const;
 
         /**
@@ -48,4 +52,10 @@ namespace tmockserver::packets {
         [[nodiscard]] std::string GetPacketTypeNameAsString() const;
 
     };
+
+    template<typename T, typename S>
+    requires std::is_enum_v<S>
+    constexpr T enumTo (S type) {
+        return static_cast<T>(type);
+    }
 } // tmockserver::messages

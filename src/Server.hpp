@@ -35,15 +35,15 @@ namespace tmockserver
 
         void Start();
 
-        std::vector<gamestate::Player> &PlayerList();
-        gamestate::Player *GetFreePlayer();
+        std::vector<terraria::Player> &PlayerList();
+        terraria::Player *GetFreePlayer();
 
         //static void Send(const net::Socket &socket, std::unique_ptr<packets::BasePacket> packet);
 
         private:
         int m_serverVersion = SERVER_PROTOCOL_VERSION;
         net::Socket m_socket;
-        std::vector<gamestate::Player> m_player_list;
+        std::vector<terraria::Player> m_player_list;
         std::mutex m_GetFreePlayerMutex;
         Config m_config = Config();
 
