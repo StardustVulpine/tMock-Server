@@ -15,10 +15,4 @@ namespace tmockserver::packets {
         LOCALIZATION_KEY = 0x02,
         SUBSTITUTION = 0x03,
     };
-
-    template<typename T, typename S>
-    requires std::is_enum_v<S>
-    constexpr T enumTo (S type) {
-        return static_cast<T>(type);
-    }
 }

@@ -9,8 +9,8 @@ endif ()
 
 # Libraries
 add_subdirectory(lib/networking)
-add_subdirectory(lib/communication)
-add_subdirectory(lib/gamestate)
+add_subdirectory(lib/packets)
+add_subdirectory(lib/terraria)
 
 # Executable
 add_subdirectory(src "${CMAKE_BINARY_DIR}/bin")

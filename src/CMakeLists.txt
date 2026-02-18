@@ -12,7 +12,7 @@ add_executable(${PROJECT_NAME} ${EXECUTABLES_LIST})
 set(LIB_LINK_TARGETS
         tmock_networking
         tmock_communication
-        tmock_gamestate
+        tmock_terraria
 )
 target_link_libraries(${PROJECT_NAME} ${LIB_LINK_TARGETS})
 add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})

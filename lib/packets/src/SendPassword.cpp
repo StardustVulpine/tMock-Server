@@ -5,7 +5,7 @@
 #include "SendPassword.hpp"
 #include <iostream>
 
-#include "../include/PacketType.hpp"
+#include <PacketType.hpp>
 
 namespace tmockserver::packets {
     SendPassword::SendPassword
@@ -32,7 +32,7 @@ namespace tmockserver::packets {
     }
 
     void SendPassword::Print() const {
-        PrintPacketHead(0);
+        PrintPacketHead(PacketDirection::RECEIVE);
         std::println(std::cout, R"(  [PAYLOAD] TextSize: {:d}; TextContent: "{}")", static_cast<char>(m_passwordSize), m_passwordContent);
     }
 }

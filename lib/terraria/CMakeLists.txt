@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.1)
-project(tmock_gamestate)
+project(tmock_terraria)
 
 set(CMAKE_CXX_STANDARD 26)
 

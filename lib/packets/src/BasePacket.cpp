@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include "Exception.hpp"
-#include "../include/NetworkTextMode.hpp"
 
 // Base for every network packet
 namespace tmockserver::packets {
@@ -22,14 +21,14 @@ namespace tmockserver::packets {
     }
 
     /**
-     * Print packet details to console.
-     * @param type 0 if packet is received, 1 if packet is sent
+     * Print packet's head to console with flag determining direction of packet.
+     * @param direction Direction of packet from enum. PacketDirection::RECEIVE if receiving packet or PacketDirection::SEND if sending.
      */
-    void BasePacket::PrintPacketHead(const std::optional<int> type) const {
-        if (type == 0) { //received packet
+    void BasePacket::PrintPacketHead(const std::optional<PacketDirection> direction) const {
+        if (direction == PacketDirection::RECEIVE) { //received packet
             std::println(std::cout, "{}> [PACKET RECEIVED]{} Size: {}, Type: ({}){}", BLUE, RESET_COLOR, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
         }
-        if (type == 1) { // send packet
+        if (direction == PacketDirection::SEND) { // send packet
             std::println(std::cout, "{}> [PACKET SEND]{} Size: {}, Type: ({}){}", PURPLE, RESET_COLOR, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
         }
     }
@@ -45,7 +44,7 @@ namespace tmockserver::packets {
     }
 
     /**
-     * Creates byte buffer with three first bytes already filled with packet size data and it's type.
+     * Creates byte buffer with three first bytes already filled with packet size data' and it's type.
      * @return Byte buffer for further sending.
      */
     std::unique_ptr<std::byte[]> BasePacket::CreateBuffer() const {
@@ -55,6 +54,7 @@ namespace tmockserver::packets {
         *reinterpret_cast<short int*>(ptr) = m_size;
         ptr += sizeof(m_size);
         *ptr = enumTo<std::byte>(m_type);
+
         return buffer;
     }
 
@@ -89,6 +89,7 @@ namespace tmockserver::packets {
                 name = "RECEIVE_PASSWORD";
                 break;
             default:
+                name = "UNKNOWN_PACKET_NAME";
                 break;
         }
 

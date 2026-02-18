@@ -5,7 +5,7 @@
 #pragma once
 
 #include "BasePacket.hpp"
-#include "../include/NetworkTextMode.hpp"
+#include <NetworkTextMode.hpp>
 
 namespace tmockserver::packets {
     class FatalError : public BasePacket {
