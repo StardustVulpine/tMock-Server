@@ -4,21 +4,9 @@ project(tmock_communication)
 set(CMAKE_CXX_STANDARD 26)
 
 set(LIB_SOURCES
-        include/Packets.hpp
-
-        src/BasePacket.hpp
-        src/ConnectRequest.hpp
-        src/FatalError.hpp
-        src/RequestPassword.hpp
-        src/SendPassword.hpp
-        src/ConnectionApproved.hpp
-
-        src/BasePacket.cpp
+        src/Packet.cpp
         src/ConnectRequest.cpp
-        src/FatalError.cpp
-        src/RequestPassword.cpp
         src/SendPassword.cpp
-        src/ConnectionApproved.cpp
 )
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
 
@@ -30,6 +18,5 @@ add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})
 
 set(INCLUDE_DIR
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR})

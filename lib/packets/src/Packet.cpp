@@ -2,9 +2,8 @@
 // Created by stardustvulpine on 1/11/26.
 //
 
-#include "BasePacket.hpp"
+#include "../include/Packet.hpp"
 #include <iostream>
-
 #include "Exception.hpp"
 
 // Base for every network packet
@@ -19,27 +18,28 @@ namespace tmockserver::packets {
      * @param size Size of the packet
      * @param type Type of network packet
      */
-    BasePacket::BasePacket(const std::size_t size, const PacketType type) {
+    Packet::Packet(const std::size_t size, const PacketType type) {
         m_size = static_cast<short int>(size);
         m_type = enumTo<std::byte>(type);
+        //m_buffer = std::make_unique<std::byte[]>(m_size);
     }
 
     /**
      * Print packet's head to console with flag determining direction of packet.
      * @param direction Direction of packet from enum. PacketDirection::RECEIVE if receiving packet or PacketDirection::SEND if sending.
      */
-    void BasePacket::PrintPacketHead(const std::optional<PacketDirection> direction) const {
-        if (direction == PacketDirection::RECEIVE) { //received packet
+    void Packet::PrintPacketHead(const std::optional<Direction> direction) const {
+        if (direction == Direction::RECEIVE) { //received packet
             std::println(std::cout, "{} <- [PACKET RECEIVED]{} Size: {}, Type: ({}){}", COLOR_BLUE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
             return;
         }
-        if (direction == PacketDirection::SEND) { // send packet
+        if (direction == Direction::SEND) { // send packet
             std::println(std::cout, "{} -> [PACKET SEND]{} Size: {}, Type: ({}){}", COLOR_PURPLE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
             return;
         }
     }
 
-    void BasePacket::Send(const net::Socket &socket [[maybe_unused]]) const {
+    void Packet::Send(const net::Socket &socket [[maybe_unused]]) const {
         try {
             const auto buffer = GetPacketContent(CreateBuffer());
             Print();
@@ -53,7 +53,7 @@ namespace tmockserver::packets {
      * Creates byte buffer with three first bytes already filled with packet size data' and it's type.
      * @return Byte buffer for further sending.
      */
-    std::unique_ptr<std::byte[]> BasePacket::CreateBuffer() const {
+    std::unique_ptr<std::byte[]> Packet::CreateBuffer() const {
         auto buffer = std::make_unique<std::byte[]>(m_size);
         std::byte* ptr = buffer.get();
 
@@ -67,7 +67,7 @@ namespace tmockserver::packets {
     /**
      * @return Size of packet read from two first bytes of packet data
      */
-    short int BasePacket::GetPacketSize() const {
+    short int Packet::PacketSize() const {
         return m_size;
     }
 
@@ -75,7 +75,7 @@ namespace tmockserver::packets {
     /**
      * @return Packet type name as string
      */
-    std::string BasePacket::GetPacketTypeNameAsString() const {
+    std::string Packet::GetPacketTypeNameAsString() const {
         std::string name;
 
         switch(static_cast<PacketType>(m_type)) {

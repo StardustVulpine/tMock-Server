@@ -10,7 +10,7 @@
 #include <thread>
 #include <json.hpp>
 #include <mutex>
-#include <Packets.hpp>
+#include <TNPPackets.hpp>
 #include "Log.hpp"
 
 using json = nlohmann::json;
@@ -78,19 +78,18 @@ namespace tmockserver {
                 while (connected) {
 
                     // Buffer for catching message's head to determine it's size and type
-                    auto msgBuffer = std::make_unique<std::byte[]>(BasePacket::Size());
-                    player->GetSocket().Read(msgBuffer.get(), BasePacket::Size());
-                    const short int msgSize = *reinterpret_cast<short int *>(msgBuffer.get());
+                    auto packetBuffer = std::make_unique<std::byte[]>(Packet::PacketHeadSize());
+                    player->GetSocket().Read(packetBuffer.get(), Packet::PacketHeadSize());
+                    const short int packetSize = *reinterpret_cast<short int *>(packetBuffer.get());
 
                     // Based on message type received from client, route to catch rest of the message content.
-                    std::byte msgType = *(msgBuffer.get() + sizeof(decltype(msgSize)));
+                    std::byte msgType = *(packetBuffer.get() + sizeof(decltype(packetSize)));
 
                     switch ( static_cast<PacketType>(msgType)) {
                         case PacketType::CONNECT_REQUEST:
                         {
-                            if (ConnectRequest connect_request (msgSize, msgBuffer, player->GetSocket()); connect_request.GetClientVersion() != m_serverVersion) {
-                                FatalError(NetworkTextMode::LITERAL, "Server doesn't support this version of game.").Send(player->GetSocket());
-                                connected = false;
+                            if (ConnectRequest connect_request (packetSize, packetBuffer, player->GetSocket()); connect_request.GetClientVersion() != m_serverVersion) {
+                                connected = Disconnect(player, "Server doesn't support this version of game.");
                                 break;
                             }
 
@@ -105,9 +104,8 @@ namespace tmockserver {
                         }
                         case PacketType::RECEIVE_PASSWORD:
                         {
-                            if (SendPassword recPass (msgSize, msgBuffer, player->GetSocket()); recPass.Content() != m_config.password) {
-                                FatalError(NetworkTextMode::LITERAL, "Wrong password.").Send(player->GetSocket());
-                                connected = false;
+                            if (SendPassword recPass (packetSize, packetBuffer, player->GetSocket()); recPass.Content() != m_config.password) {
+                                connected = Disconnect(player, "Wrong password.");
                                 break;
                             }
                             ConnectionApproved(player->GetID()).Send(player->GetSocket());
@@ -115,13 +113,12 @@ namespace tmockserver {
                         }
 
                         default:
-                            // Consume the rest of the packet to keep stream in sync
-                            auto buffer = std::make_unique<std::byte[]>(msgSize - BasePacket::Size());
-                            player->GetSocket().Read(buffer.get(), msgSize - BasePacket::Size());
+                            // Consume the rest of the packet to keep network data stream in sync
+                            auto buffer = std::make_unique<std::byte[]>(packetSize - Packet::PacketHeadSize());
+                            player->GetSocket().Read(buffer.get(), packetSize - Packet::PacketHeadSize());
 
                             Console::Log::Error("{} has send unhandled message type: {}", clientIP, static_cast<int>(msgType));
-                            //FatalError(NetworkTextMode::LITERAL, "Unhandled message type.").Send(player->GetSocket());
-                            //connected = false;
+                            //connected = Disconnect(player, "Unhandled message type.");
                     }
                 }
                 Console::Log::Warning("{} disconnected", clientIP);
@@ -183,6 +180,12 @@ namespace tmockserver {
             }
         }
         return nullptr;
+    }
+
+    bool Server::Disconnect(terraria::Player *player, const std::string& reason)
+    {
+        packets::FatalError(packets::NetworkTextMode::LITERAL, reason).Send(player->GetSocket());
+        return false;
     }
 
     /*void Server::Send(const net::Socket &socket, std::unique_ptr<packets::BasePacket> packet)

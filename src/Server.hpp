@@ -6,7 +6,7 @@
 
 #include <Socket.hpp>
 #include <Player.hpp>
-#include <Packets.hpp>
+#include <TNPPackets.hpp>
 #include <vector>
 
 constexpr int SERVER_PROTOCOL_VERSION = 318;
@@ -44,6 +44,7 @@ namespace tmockserver
 
         void Run();
         void ConsoleLoop();
+        static bool Disconnect(terraria::Player *player, const std::string& reason);
 
     };
 } // tmockserver

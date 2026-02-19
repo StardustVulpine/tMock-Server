@@ -3,12 +3,13 @@
 //
 
 #pragma once
-#include "BasePacket.hpp"
+
+#include "Packet.hpp"
 
 namespace tmockserver::packets {
-    class SendPassword : public BasePacket {
+    class SendPassword : public Packet {
     public:
-        SendPassword(std::size_t msgSize, std::unique_ptr<std::byte[]>(&buffer), const net::Socket& client_socket);
+        SendPassword(std::size_t packetSize, std::unique_ptr<std::byte[]>(&buffer), const net::Socket& client_socket);
 
         ~SendPassword() override = default;
 

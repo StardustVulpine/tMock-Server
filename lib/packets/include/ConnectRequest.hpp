@@ -5,11 +5,10 @@
 #pragma once
 
 #include <expected>
-#include "BasePacket.hpp"
-#include <PacketType.hpp>
+#include "Packet.hpp"
 
 namespace tmockserver::packets {
-    class ConnectRequest : public BasePacket {
+    class ConnectRequest : public Packet {
     public:
         enum class VersionError { BadVersion = 0 };
 
