@@ -9,12 +9,7 @@
 #include <Packets.hpp>
 #include <vector>
 
-#define RESET_COLOR "\033[0m"
-#define GREEN "\033[38;2;0;255;1m"
-#define YELLOW "\033[38;2;255;191;0m"
-#define RED "\033[38;2;220;20;60m"
-
-constexpr int SERVER_PROTOCOL_VERSION = 318 ;
+constexpr int SERVER_PROTOCOL_VERSION = 318;
 constexpr int DEFAULT_PORT = 7777;
 constexpr int DEFAULT_MAX_CLIENTS = 8;
 
@@ -48,6 +43,7 @@ namespace tmockserver
         Config m_config = Config();
 
         void Run();
+        void ConsoleLoop();
 
     };
 } // tmockserver

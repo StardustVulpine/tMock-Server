@@ -10,6 +10,10 @@
 // Base for every network packet
 namespace tmockserver::packets {
 
+#define COLOR_RESET "\033[0m"
+#define COLOR_BLUE "\033[38;2;0;255;255m"
+#define COLOR_PURPLE "\033[38;2;255;0;255m"
+
     /**
      * Create base network packet by defining its size and type. Can be extended when inherited by other classes.
      * @param size Size of the packet
@@ -26,10 +30,12 @@ namespace tmockserver::packets {
      */
     void BasePacket::PrintPacketHead(const std::optional<PacketDirection> direction) const {
         if (direction == PacketDirection::RECEIVE) { //received packet
-            std::println(std::cout, "{}> [PACKET RECEIVED]{} Size: {}, Type: ({}){}", BLUE, RESET_COLOR, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
+            std::println(std::cout, "{} <- [PACKET RECEIVED]{} Size: {}, Type: ({}){}", COLOR_BLUE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
+            return;
         }
         if (direction == PacketDirection::SEND) { // send packet
-            std::println(std::cout, "{}> [PACKET SEND]{} Size: {}, Type: ({}){}", PURPLE, RESET_COLOR, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
+            std::println(std::cout, "{} -> [PACKET SEND]{} Size: {}, Type: ({}){}", COLOR_PURPLE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
+            return;
         }
     }
 
