@@ -11,6 +11,7 @@
 #include <json.hpp>
 #include <mutex>
 #include <Packets.hpp>
+#include "Log.hpp"
 
 using json = nlohmann::json;
 
@@ -33,7 +34,7 @@ namespace tmockserver {
     {
         m_socket.Bind(m_config.port);
         m_socket.Listen();
-        std::println(std::cout, "{}Server started on port {}! {}", GREEN, m_config.port, RESET_COLOR);
+        Console::Log::Info("Server started on port {}!", m_config.port);
         Run();
     }
 
@@ -46,23 +47,27 @@ namespace tmockserver {
         for (int i=0; i < m_config.max_players; i++) {
             m_player_list.emplace_back(static_cast<std::byte>(i));
         }
+        Console::Log::Info("Waiting for connections...");
 
-        std::println(std::cout, "{}Waiting for connections...{}", YELLOW, RESET_COLOR);
+        std::thread {[this](){
+            ConsoleLoop();
+        }}.detach();
 
         //region Main loop
         while (true) {
             // Accept connection and assign move it to thread for handling
             Socket client_socket = m_socket.Accept();
+            if (!client_socket.IsConnected()) break;
+
             std::thread {[this, client_socket = std::move(client_socket)]() mutable
             {
                 std::string clientIP = client_socket.GetAddressAsString(true);
-                std::println(std::cout, "{}{} is connecting... {}", YELLOW, clientIP, RESET_COLOR);
+                Console::Log::Warning("{} is connecting...", clientIP);
 
                 //region Assign socket to player if there free slot.
                 Player *player = GetFreePlayer();
                 if (!player) {
                     FatalError(NetworkTextMode::LITERAL, "Server is full.").Send(client_socket);
-                    //Send(client_socket, createPacket<FatalError>(NetworkTextMode::LITERAL, "Server is full."));
                     return;
                 }
                 player->SetSocket(std::move(client_socket));
@@ -94,7 +99,7 @@ namespace tmockserver {
                                 break;
                             }
 
-                            std::println(std::cout, "{}{} connection approved. {}", GREEN, clientIP, RESET_COLOR);
+                            Console::Log::Info("{} connection approved.", clientIP);
                             ConnectionApproved(player->GetID()).Send(player->GetSocket());
                             break;
                         }
@@ -114,17 +119,58 @@ namespace tmockserver {
                             auto buffer = std::make_unique<std::byte[]>(msgSize - BasePacket::Size());
                             player->GetSocket().Read(buffer.get(), msgSize - BasePacket::Size());
 
-                            std::println(std::cout, "{}{} has send unhandled message type: {}{}",
-                                RED, player->GetSocket().GetAddressAsString(), static_cast<int>(msgType), RESET_COLOR
-                            );
+                            Console::Log::Error("{} has send unhandled message type: {}", clientIP, static_cast<int>(msgType));
                             //FatalError(NetworkTextMode::LITERAL, "Unhandled message type.").Send(player->GetSocket());
                             //connected = false;
                     }
                 }
-                std::println(std::cout, "{}{} disconnected {}", YELLOW, clientIP, RESET_COLOR);
+                Console::Log::Warning("{} disconnected", clientIP);
             }}.detach();
         } //endregion Main loop
+
     } // Run
+
+    void Server::ConsoleLoop() {
+        std::string input;
+        while (true) {
+            std::getline(std::cin, input);
+            const auto pos = input.find(' ');
+            std::string command = input.substr(0, pos);
+            std::string args = input.substr(pos + 1);
+
+
+            if (command == "ping")
+            {
+                Console::Log::Print("Pong!");
+            }
+            else if (command == "show")
+            {
+                if (args == "port") {
+                    Console::Log::Print("Server port: {}", m_config.port);
+                } else if (args == "ip")
+                {
+                    Console::Log::Print("Server IP: {}", m_socket.GetAddressAsString());
+                } else
+                {
+                    Console::Log::Error("Missing or unknown arguments!");
+                    Console::Log::Print("Available arguments:\n"
+                        "                              port - prints server port\n"
+                        "                              ip - prints server ip");
+                }
+            }
+            else if (command == "exit")
+            {
+                Console::Log::Warning("Shutting down server...");
+                exit(0);
+            } else {
+                Console::Log::Error("Unknow command!");
+                Console::Log::Print("Available commands:\n"
+                        "                              ping - replies with pong\n"
+                        "                              show <ip/port> - print server port or ip depending on provided argument\n"
+                        "                              exit - shuts down server\n");
+            }
+        }
+    } // ConsoleLoop
 
     std::vector<terraria::Player> &Server::PlayerList() { return m_player_list;}
 

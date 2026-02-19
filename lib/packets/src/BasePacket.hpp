@@ -9,18 +9,12 @@
 #include <Socket.hpp>
 
 // Base for every network packet
-
-#define RESET_COLOR "\033[0m"
-#define BLUE "\033[38;2;0;255;255m"
-#define PURPLE "\033[38;2;255;0;255m"
-
 namespace tmockserver::packets {
     enum class PacketDirection
     {
         RECEIVE = 1,
         SEND
     };
-
 
     class BasePacket {
     public:
@@ -50,7 +44,6 @@ namespace tmockserver::packets {
         std::byte m_type{}; // Type of the network packet
 
         [[nodiscard]] std::string GetPacketTypeNameAsString() const;
-
     };
 
     template<typename T, typename S>
