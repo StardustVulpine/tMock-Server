@@ -3,14 +3,12 @@
 //
 
 #include "Server.hpp"
-
 #include <fstream>
 #include <iostream>
-#include <ostream>
 #include <thread>
-#include <json.hpp>
 #include <mutex>
-#include <TNPPackets.hpp>
+#include <json.hpp>
+#include <PacketList.hpp>
 #include "Log.hpp"
 
 using json = nlohmann::json;

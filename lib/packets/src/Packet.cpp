@@ -29,11 +29,11 @@ namespace tmockserver::packets {
      * @param direction Direction of packet from enum. PacketDirection::RECEIVE if receiving packet or PacketDirection::SEND if sending.
      */
     void Packet::PrintPacketHead(const std::optional<Direction> direction) const {
-        if (direction == Direction::RECEIVE) { //received packet
+        if (direction == Direction::INCOMING) { //received packet
             std::println(std::cout, "{} <- [PACKET RECEIVED]{} Size: {}, Type: ({}){}", COLOR_BLUE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
             return;
         }
-        if (direction == Direction::SEND) { // send packet
+        if (direction == Direction::OUTGOING) { // send packet
             std::println(std::cout, "{} -> [PACKET SEND]{} Size: {}, Type: ({}){}", COLOR_PURPLE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
             return;
         }

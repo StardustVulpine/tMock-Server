@@ -19,9 +19,10 @@ namespace tmockserver::packets {
         public:
         enum class Direction
         {
-            RECEIVE = 1,
-            SEND
+            INCOMING = 1,
+            OUTGOING
         };
+
         Packet(std::size_t size, PacketType type);
         virtual ~Packet() = default;
 

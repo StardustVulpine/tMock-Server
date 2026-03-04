@@ -11,7 +11,7 @@ namespace tmockserver::packets {
     public:
         RequestPassword() : Packet(PacketHeadSize(), PacketType::REQUEST_PASSWORD){}
         void Print() const override {
-            PrintPacketHead(Direction::SEND);
+            PrintPacketHead(Direction::OUTGOING);
             std::println(std::cout, "  [NO-PAYLOAD]");
         }
         [[nodiscard]] std::unique_ptr<std::byte[]> GetPacketContent(std::unique_ptr<std::byte[]> buffer) const override

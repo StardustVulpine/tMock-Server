@@ -9,11 +9,30 @@
 namespace tmockserver::packets {
     class SendPassword : public Packet {
     public:
-        SendPassword(std::size_t packetSize, std::unique_ptr<std::byte[]>(&buffer), const net::Socket& client_socket);
+        SendPassword(const std::size_t packetSize, std::unique_ptr<std::byte[]> &buffer, const net::Socket &client_socket)
+        : Packet(packetSize, PacketType::RECEIVE_PASSWORD)
+        {
+            buffer = std::make_unique<std::byte[]>(PacketSize());
+            client_socket.Read(buffer.get() + PacketHeadSize(), PacketSize() - PacketHeadSize());
+            std::byte* ptr = buffer.get();
+            *reinterpret_cast<short int *>(ptr) = static_cast<short int>(packetSize);
+            ptr += 2;
+            *ptr = static_cast<std::byte>(PacketType::CONNECT_REQUEST);
+            ptr++;
+            m_passwordSize = *ptr;
+            ptr++;
+            const std::string_view txtContent (reinterpret_cast<char *>(ptr), std::to_integer<size_t>(m_passwordSize));
+            m_passwordContent = txtContent;
+
+            SendPassword::Print();
+        }
 
         ~SendPassword() override = default;
 
-        void Print() const override;
+        void Print() const override {
+            PrintPacketHead(Direction::INCOMING);
+            std::println(std::cout, R"(  [PAYLOAD] TextSize: {:d}; TextContent: "{}")", static_cast<char>(m_passwordSize), m_passwordContent);
+        }
 
         std::string Content() {
             return m_passwordContent;
@@ -25,7 +44,7 @@ namespace tmockserver::packets {
 
         [[nodiscard]] std::unique_ptr<std::byte[]> GetPacketContent(const std::unique_ptr<std::byte[]> buffer) const override
         {
-            std::byte* ptr = buffer.get();
+            const std::byte* ptr = buffer.get();
             (void)ptr; // :C
             return nullptr;
         }

@@ -5,8 +5,6 @@ set(CMAKE_CXX_STANDARD 26)
 
 set(LIB_SOURCES
         src/Packet.cpp
-        src/ConnectRequest.cpp
-        src/SendPassword.cpp
 )
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
 

@@ -13,7 +13,7 @@ namespace tmockserver::packets {
         ~ConnectionApproved() override = default;
 
         void Print() const override {
-            PrintPacketHead(Direction::SEND);
+            PrintPacketHead(Direction::OUTGOING);
             std::println(std::cout, "  [PAYLOAD] Player Slot: {}", std::to_integer<int>(m_playerSlotID));
         }
         [[nodiscard]] std::unique_ptr<std::byte[]> GetPacketContent(std::unique_ptr<std::byte[]> buffer) const override

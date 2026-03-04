@@ -15,7 +15,7 @@ namespace tmockserver::packets {
 
         void Print() const override
         {
-            PrintPacketHead(Direction::SEND);
+            PrintPacketHead(Direction::OUTGOING);
             std::println(std::cout, "  [PAYLOAD] NetworkTextMode: LITERAL, TextSize: {}, TextContent: {}", static_cast<int>(m_textSize), m_textContent);
         }
 

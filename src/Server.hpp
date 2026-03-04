@@ -6,7 +6,7 @@
 
 #include <Socket.hpp>
 #include <Player.hpp>
-#include <TNPPackets.hpp>
+#include <PacketList.hpp>
 #include <vector>
 
 constexpr int SERVER_PROTOCOL_VERSION = 318;
