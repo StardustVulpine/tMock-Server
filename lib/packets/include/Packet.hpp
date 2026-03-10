@@ -27,6 +27,8 @@ namespace tmockserver::packets {
         virtual ~Packet() = default;
 
         void PrintPacketHead(std::optional<Direction> direction) const;
+        [[nodiscard]] std::string GetPacketHeadAsString(Direction direction) const;
+
         virtual void Print() const = 0;
 
         void Send(const net::Socket &socket) const;

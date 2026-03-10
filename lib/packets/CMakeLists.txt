@@ -10,6 +10,7 @@ add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
 
 set(LIB_LINK_TARGETS
         tmock_networking
+        console_logger
 )
 target_link_libraries(${PROJECT_NAME} ${LIB_LINK_TARGETS})
 add_dependencies(${PROJECT_NAME} ${LIB_LINK_TARGETS})

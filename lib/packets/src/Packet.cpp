@@ -35,8 +35,17 @@ namespace tmockserver::packets {
         }
         if (direction == Direction::OUTGOING) { // send packet
             std::println(std::cout, "{} -> [PACKET SEND]{} Size: {}, Type: ({}){}", COLOR_PURPLE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
-            return;
         }
+    }
+
+    std::string Packet::GetPacketHeadAsString(const Direction direction) const
+    {
+        //received packet
+        if (direction == Direction::INCOMING) {
+            return std::format("{}[<- INCOMING PACKET]{} Size: {}, Type: ({}){}", COLOR_BLUE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
+        }
+        // send packet
+        return std::format("{}[OUTGOING PACKET ->]{} Size: {}, Type: ({}){}", COLOR_PURPLE, COLOR_RESET, m_size, static_cast<int>(m_type), GetPacketTypeNameAsString());
     }
 
     void Packet::Send(const net::Socket &socket [[maybe_unused]]) const {

@@ -9,9 +9,10 @@
 #include <mutex>
 #include <json.hpp>
 #include <PacketList.hpp>
-#include "Log.hpp"
+#include <Log.hpp>
 
 using json = nlohmann::json;
+using Console = stardustvulpine::Console::Logger::Log;
 
 namespace
 {
@@ -47,9 +48,7 @@ namespace tmockserver {
         }
         Console::Log::Info("Waiting for connections...");
 
-        std::thread {[this](){
-            ConsoleLoop();
-        }}.detach();
+        std::thread {[this]{ ConsoleLoop(); }}.detach();
 
         //region Main loop
         while (true) {
@@ -64,7 +63,8 @@ namespace tmockserver {
 
                 //region Assign socket to player if there free slot.
                 Player *player = GetFreePlayer();
-                if (!player) {
+                if (!player)
+                {
                     FatalError(NetworkTextMode::LITERAL, "Server is full.").Send(client_socket);
                     return;
                 }
@@ -102,7 +102,7 @@ namespace tmockserver {
                         }
                         case PacketType::RECEIVE_PASSWORD:
                         {
-                            if (SendPassword recPass (packetSize, packetBuffer, player->GetSocket()); recPass.Content() != m_config.password) {
+                            if (SendPassword recPass (packetSize, packetBuffer, player->GetSocket()); recPass.GetPasswordAsString() != m_config.password) {
                                 connected = Disconnect(player, "Wrong password.");
                                 break;
                             }
@@ -116,7 +116,7 @@ namespace tmockserver {
                             player->GetSocket().Read(buffer.get(), packetSize - Packet::PacketHeadSize());
 
                             Console::Log::Error("{} has send unhandled message type: {}", clientIP, static_cast<int>(msgType));
-                            //connected = Disconnect(player, "Unhandled message type.");
+                            connected = Disconnect(player, "Unhandled message type.");
                     }
                 }
                 Console::Log::Warning("{} disconnected", clientIP);

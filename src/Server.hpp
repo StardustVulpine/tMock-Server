@@ -9,7 +9,7 @@
 #include <PacketList.hpp>
 #include <vector>
 
-constexpr int SERVER_PROTOCOL_VERSION = 318;
+constexpr int SERVER_PROTOCOL_VERSION = 319;
 constexpr int DEFAULT_PORT = 7777;
 constexpr int DEFAULT_MAX_CLIENTS = 8;
 

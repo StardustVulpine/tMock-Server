@@ -8,7 +8,7 @@
 #include <iostream>
 #include <chrono>
 
-namespace tmockserver::Console
+namespace stardustvulpine::Console::Logger
 {
     class Log
     {

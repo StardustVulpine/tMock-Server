@@ -37,6 +37,7 @@ namespace tmockserver::packets {
             std::println(std::cout, R"(  [PAYLOAD] TextSize: {:d}; TextContent: "{}")", static_cast<char>(m_textSize), m_textContent);
         }
 
+
         [[nodiscard]] std::expected<int, VersionError> GetClientVersion() const {
             const std::string ver_s = m_textContent.substr(8,3);
             if (int version{}; std::from_chars(ver_s.data(), ver_s.data() + ver_s.length(), version)) {

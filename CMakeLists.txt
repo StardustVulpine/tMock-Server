@@ -11,6 +11,7 @@ endif ()
 add_subdirectory(lib/networking)
 add_subdirectory(lib/packets)
 add_subdirectory(lib/terraria)
+add_subdirectory(lib/logger)
 
 # Executable
 add_subdirectory(src "${CMAKE_BINARY_DIR}/bin")

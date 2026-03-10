@@ -34,7 +34,7 @@ namespace tmockserver::packets {
             std::println(std::cout, R"(  [PAYLOAD] TextSize: {:d}; TextContent: "{}")", static_cast<char>(m_passwordSize), m_passwordContent);
         }
 
-        std::string Content() {
+        std::string GetPasswordAsString() {
             return m_passwordContent;
         }
 
