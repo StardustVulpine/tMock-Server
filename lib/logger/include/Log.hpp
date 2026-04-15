@@ -23,40 +23,80 @@ namespace stardustvulpine::Console::Logger
             std::string RESET = "\033[0m";
         };
 
-        public:
-        template<class... Args> static void Print(std::format_string<Args...> msg, Args&&... args)
+        enum class Severity
         {
-            std::string message = std::format(msg, std::forward<Args>(args)...);
-            std::println(std::cout, "{} {}", Time(), message);
+            NONE_L = 0,
+            INFO_L,
+            DEBUG_L,
+            WARNING_L,
+            ERROR_L
+        };
+
+        public:
+        template<class... Args> static void Print(const std::string_view msg, Args&&... args)
+        {
+            const std::string message = std::vformat(msg, std::make_format_args(args...));
+            PrintLog(Severity::NONE_L, message);
         }
 
         template<class... Args> static void Debug(std::format_string<Args...> msg, Args&&... args)
         {
-            std::string message = std::format(msg, std::forward<Args>(args)...);
-            std::println(std::cout, "{}{} [DEBUG] {}{}", color.ORANGE, Time(), message, color.RESET);
+            const std::string message = std::format(msg, std::forward<Args>(args)...);
+            PrintLog(Severity::DEBUG_L, message);
         }
 
         template<class... Args> static void Info(std::format_string<Args...> msg, Args&&... args)
         {
-            std::string message = std::format(msg, std::forward<Args>(args)...);
-            std::println(std::cout, "{}{} [INFO] {}{}", color.GREEN, Time(), message, color.RESET);
+            const std::string message = std::format(msg, std::forward<Args>(args)...);
+            PrintLog(Severity::INFO_L, message);
         }
 
         template<class... Args> static void Warning(std::format_string<Args...> msg, Args&&... args)
         {
-            std::string message = std::format(msg, std::forward<Args>(args)...);
-            std::println(std::cout, "{}{} [WARNING] {}{}", color.YELLOW, Time(), message, color.RESET);
+            const std::string message = std::format(msg, std::forward<Args>(args)...);
+            PrintLog(Severity::WARNING_L, message);
         }
 
         template<class... Args> static void Error(std::format_string<Args...> msg, Args&&... args)
         {
-            std::string message = std::format(msg, std::forward<Args>(args)...);
-            std::println(std::cout, "{}{} [ERROR] {}{}", color.RED, Time(), message, color.RESET);
+            const std::string message = std::format(msg, std::forward<Args>(args)...);
+            PrintLog(Severity::ERROR_L, message);
         }
 
         private:
         // Declaration of the static member. The definition will be in Log.cpp.
         static const Color color;
+
+        static void PrintLog(const Severity severity, const std::string& msg)
+        {
+            std::string col;
+            std::string level;
+            switch (severity)
+            {
+                case Severity::DEBUG_L:
+                    col = color.ORANGE;
+                    level = "DEBUG";
+                    break;
+                case Severity::ERROR_L:
+                    col = color.RED;
+                    level = "ERROR";
+                    break;
+                case Severity::INFO_L:
+                    col = color.GREEN;
+                    level = "INFO";
+                    break;
+                case Severity::WARNING_L:
+                    col = color.YELLOW;
+                    level = "WARNING";
+                    break;
+                case Severity::NONE_L:
+                    col = color.RESET;
+                    level = "";
+                    break;
+            }
+
+            std::println(std::cout,"{}[{}] {}: {}{}", col, Time(), level, msg, color.RESET);
+        }
 
         static std::string Time()
         {
@@ -66,5 +106,5 @@ namespace stardustvulpine::Console::Logger
             return std::vformat("{}", std::make_format_args(time));
         }
     };
-    const Log::Color Log::color = Color();
+    inline const Log::Color Log::color = Color();
 }

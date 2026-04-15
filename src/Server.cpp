@@ -65,7 +65,10 @@ namespace tmockserver {
                 Player *player = GetFreePlayer();
                 if (!player)
                 {
-                    FatalError(NetworkTextMode::LITERAL, "Server is full.").Send(client_socket);
+                    auto e = FatalError(NetworkTextMode::LITERAL, "Server is full.");
+                    e.Send(client_socket);
+                    //Console::Log::Print(e.Get<std::string>());
+                    Console::Log::Print(e.GetPacketPayloadAsString());
                     return;
                 }
                 player->SetSocket(std::move(client_socket));
